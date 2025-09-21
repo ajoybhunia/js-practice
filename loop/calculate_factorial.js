@@ -1,4 +1,4 @@
-const number = -2;
+const number = 5;
 let currentNumber = 1;
 let product = 1;
 if(number >= 0){
