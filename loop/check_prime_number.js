@@ -1,7 +1,10 @@
-const number = 79;
+const number = 5;
 let isPrime = true;
 let divisor = 2;
 
+if(number < 2){
+  isPrime = false;
+}
 while(divisor < number){
   if(number !== 2 && number % divisor === 0){
     isPrime = false;
