@@ -93,14 +93,15 @@ function playRockPaperScissor(move) {
 
 function startGame() {
   console.log(`${underline(`\nChoose your move:`)}
-- rock
-- paper
-- scissors\n`);
+  - rock
+  - paper
+  - scissors\n`);
 
   const move = prompt("Enter your move: ");
   playRockPaperScissor(move);
 
-  if (confirm("Do you want to play again? -->")) {
+  if (confirm("Do you want to play again? -->\t")) {
+    console.clear();
     startGame();
   }
   return;
