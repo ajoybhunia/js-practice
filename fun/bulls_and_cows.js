@@ -185,7 +185,7 @@ function startGame() {
   let totalAttempts = parseInt(takeInput('\nHow many attempts do you want? : '));
   let usedAttempts = 0;
   console.clear();
-  console.log(secretNumber);
+  // console.log(secretNumber);
 
 
   while (totalAttempts > 0) {
