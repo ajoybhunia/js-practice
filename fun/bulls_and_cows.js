@@ -174,7 +174,7 @@ function takeInput(text) {
   while (isNaN(input) || input === "") {
     console.clear();
     console.log(`${input} is an Invalid Input!\nPlease enter a valid number!`);
-    input = prompt(text);
+    input = prompt(text).trim();
   }
 
   return input;
@@ -187,7 +187,6 @@ function startGame() {
   console.clear();
   // console.log(secretNumber);
 
-
   while (totalAttempts > 0) {
     if (totalAttempts === 1) alertMessage();
     const guess = takeInput('Guess the number: ');
@@ -199,9 +198,7 @@ function startGame() {
     }
   }
 
-  if (totalAttempts === 0) {
-    return displayLoseMessage(secretNumber);
-  }
+  return displayLoseMessage(secretNumber);
 }
 
 function description() {
