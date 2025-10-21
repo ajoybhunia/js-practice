@@ -58,7 +58,7 @@ function displayDrawMessage(board) {
 }
 
 
-function checkWinner(board) {
+function isWin(board) {
 
   for (let i = 0; i < WINCONDITIONS.length; i++) {
     const a = WINCONDITIONS[i][0];
@@ -116,15 +116,17 @@ function startGame() {
   const nameOfPlayers = players();
   let currentPlayer = nameOfPlayers[0];
 
-  while (!checkWinner(board)) {
+  while (!isWin(board)) {
     printBoard(board);
     const index = parseInt(takeMove(currentPlayer, board));
 
     board[index] = currentPlayer === nameOfPlayers[0] ? '❌' : '⭕';
 
-    if (checkWinner(board)) {
+    if (isWin(board)) {
       return displayWinMessage(board, currentPlayer);
-    } else if (isDraw(board)) {
+    }
+
+    if (isDraw(board)) {
       return displayDrawMessage(board);
     }
 
