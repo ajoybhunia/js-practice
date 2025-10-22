@@ -53,22 +53,21 @@ function displayDrawMessage(board) {
   const message = "🤝 It's a Draw! Good Game!";
   const border = yellow("-".repeat(message.length));
 
-  console.log(`${yellow(message)}`);  
+  console.log(`${yellow(message)}`);
   console.log(`${border}\n`);
 }
 
+function checkWin(board, index, symbol) {
+  const a = WINCONDITIONS[index][0];
+  const b = WINCONDITIONS[index][1];
+  const c = WINCONDITIONS[index][2];
+
+  return (board[a] === symbol && board[b] === symbol && board[c] === symbol);
+}
 
 function isWin(board) {
-
   for (let i = 0; i < WINCONDITIONS.length; i++) {
-    const a = WINCONDITIONS[i][0];
-    const b = WINCONDITIONS[i][1];
-    const c = WINCONDITIONS[i][2];
-
-    if (
-      (board[a] === '❌' && board[b] === '❌' && board[c] === '❌') ||
-      (board[a] === '⭕' && board[b] === '⭕' && board[c] === '⭕')
-    ) {
+    if (checkWin(board, i, '❌') || checkWin(board, i, '⭕')) {
       return true;
     }
   }
