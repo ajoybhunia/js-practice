@@ -32,24 +32,32 @@ function decodeList(bencodedString, decoded) {
   let index = 1;
 
   while (index < bencodedString.length) {
-    if (bencodedString[index] === 'l') {
-      const subResult = decode(bencodedString.slice(index));
-      decoded.push(subResult);
-      return decoded;
+    if (bencodedString[index] === 'e') {
+      return index + 1;
     }
+
+    if (bencodedString[index] === 'l') {
+      const subDecoded = [];
+      const consumed = decodeList(bencodedString.slice(index), subDecoded);
+      decoded.push(subDecoded);
+      index += consumed;
+    }
+
     if (`${parseInt(bencodedString[index])}` !== 'NaN') {
-      const newBencodedString = bencodedString.slice(index, bencodedString.length - 1);
-      const lengthOfString = parseInt(newBencodedString.slice(0, newBencodedString.indexOf(':')));
-      const bencodedListElements = newBencodedString.slice(0, lengthOfString + `${lengthOfString}`.length + 1);
-      const jump = lengthOfString + `${lengthOfString}`.length;
-      decoded.push(decode(bencodedListElements.slice(0)));
-      index += jump + 1;
+      const indexOfColon = bencodedString.indexOf(':', index);
+      const length = parseInt(bencodedString.slice(index, indexOfColon));
+      const startIndex = indexOfColon + 1;
+      const endIndex = startIndex + length;
+      // const decodedString = bencodedString.slice(startIndex, endIndex);
+      const decodedString = decode(bencodedString.slice(index, endIndex));
+      decoded.push(decodedString);
+      index = endIndex;
     } else if (bencodedString[index] === 'i') {
-      const newBencodedString = bencodedString.slice(index, bencodedString.length - 1);
-      const bencodedListElements = newBencodedString.slice(0, newBencodedString.indexOf('e') + 1);
-      const jump = bencodedListElements.indexOf('e');
-      decoded.push(decode(bencodedListElements.slice(0, jump)));
-      index += jump + 1;
+      const endIndex = bencodedString.indexOf('e', index);
+      // const decodedNumber = parseInt(bencodedString.slice(index + 1, endIndex));
+      const decodedNumber = decode(bencodedString.slice(index));
+      decoded.push(decodedNumber);
+      index = endIndex + 1;
     } else {
       index++;
     }
@@ -65,7 +73,8 @@ function decode(bencodedString) {
   }
 
   if (bencodedString[0] === 'i') {
-    return parseInt(bencodedString.slice(1));
+    const endIndex = bencodedString.indexOf('e');
+    return parseInt(bencodedString.slice(1, endIndex));
   }
 
   return bencodedString.slice(bencodedString.indexOf(':') + 1);
@@ -141,7 +150,7 @@ function testAllDecodeTestCases() {
   test(decode('li0e3:one3:twoi3ee'), [0, 'one', 'two', 3], 'List of Both String and Numbers');
   test(decode('li1e3:twol5:threei4eee'), [1, 'two', ['three', 4]], 'Nested List');
   test(decode('li1e3:twol5:threei4el5:threei4eee'), [1, 'two', ['three', 4, ['three', 4]]], 'Nested List');
-  // test(decode('li1e3:twol5:threei4eei1ee'), [1, 'two', ['three', 4], 1], 'Nested List');
+  test(decode('li1e3:twol5:threei4eei1ee'), [1, 'two', ['three', 4], 1], 'Nested List');
   test(decode('le'), [], 'Empty List');
   test(decode('llee'), [[]], 'Nested Empty List');
 }
