@@ -67,7 +67,7 @@ function decode(bencodedString) {
   if (bencodedString[0] === 'i') {
     return parseInt(bencodedString.slice(1));
   }
-  
+
   return bencodedString.slice(bencodedString.indexOf(':') + 1);
 }
 
@@ -80,7 +80,7 @@ function encode(data) {
     return `l${encoded}e`;
   }
 
-  if (`${parseInt(data)}` === 'NaN') {
+  if (typeof data === 'string') {
     return `${data.length}:${data}`;
   }
 
@@ -113,6 +113,7 @@ function testAllEncodeTestCases() {
   test(encode(-12), 'i-12e', 'Negetive Integer');
 
   test(encode('Hey'), '3:Hey', 'Byte String');
+  test(encode('1Hey'), '4:1Hey', 'Byte String Leading Number');
   test(encode(''), '0:', 'Empty String');
   test(encode('special!@#$chars'), '16:special!@#$chars', 'Special Characters');
 
@@ -140,11 +141,13 @@ function testAllDecodeTestCases() {
   test(decode('li0e3:one3:twoi3ee'), [0, 'one', 'two', 3], 'List of Both String and Numbers');
   test(decode('li1e3:twol5:threei4eee'), [1, 'two', ['three', 4]], 'Nested List');
   test(decode('li1e3:twol5:threei4el5:threei4eee'), [1, 'two', ['three', 4, ['three', 4]]], 'Nested List');
+  // test(decode('li1e3:twol5:threei4eei1ee'), [1, 'two', ['three', 4], 1], 'Nested List');
   test(decode('le'), [], 'Empty List');
+  test(decode('llee'), [[]], 'Nested Empty List');
 }
 
 function main() {
-  // testAllEncodeTestCases();
+  testAllEncodeTestCases();
   testAllDecodeTestCases();
 }
 
