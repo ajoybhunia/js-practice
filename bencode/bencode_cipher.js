@@ -92,7 +92,6 @@ function displayMessage(isResultEqual, type, actual, expected) {
   let message = `\t${icon} ${type}\n`;
 
   if (!isResultEqual) {
-    // message += `\t   | Input    : ${data}\n`;
     message += `\t   | Actual   : ${actual}\n`;
     message += `\t   | Expected : ${expected}\n`;
   }
