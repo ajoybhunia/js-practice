@@ -28,6 +28,27 @@ function areDeepEqual(array1, array2) {
   return array1 === array2;
 }
 
+function decodeString(bencodedString, index, decoded) {
+  const indexOfColon = bencodedString.indexOf(':', index);
+  const length = parseInt(bencodedString.slice(index, indexOfColon));
+  const startIndex = indexOfColon + 1;
+  const endIndex = startIndex + length;
+  // const decodedString = bencodedString.slice(startIndex, endIndex);
+  const decodedString = decode(bencodedString.slice(index, endIndex));
+  decoded.push(decodedString);
+
+  return endIndex;
+}
+
+function decodeInteger(bencodedString, index, decoded) {
+  const endIndex = bencodedString.indexOf('e', index);
+  // const decodedNumber = parseInt(bencodedString.slice(index + 1, endIndex));
+  const decodedNumber = decode(bencodedString.slice(index));
+  decoded.push(decodedNumber);
+
+  return endIndex;
+}
+
 function decodeList(bencodedString, decoded) {
   let index = 1;
 
@@ -44,19 +65,10 @@ function decodeList(bencodedString, decoded) {
     }
 
     if (`${parseInt(bencodedString[index])}` !== 'NaN') {
-      const indexOfColon = bencodedString.indexOf(':', index);
-      const length = parseInt(bencodedString.slice(index, indexOfColon));
-      const startIndex = indexOfColon + 1;
-      const endIndex = startIndex + length;
-      // const decodedString = bencodedString.slice(startIndex, endIndex);
-      const decodedString = decode(bencodedString.slice(index, endIndex));
-      decoded.push(decodedString);
+      const endIndex = decodeString(bencodedString, index, decoded);
       index = endIndex;
     } else if (bencodedString[index] === 'i') {
-      const endIndex = bencodedString.indexOf('e', index);
-      // const decodedNumber = parseInt(bencodedString.slice(index + 1, endIndex));
-      const decodedNumber = decode(bencodedString.slice(index));
-      decoded.push(decodedNumber);
+      const endIndex = decodeInteger(bencodedString, index, decoded);
       index = endIndex + 1;
     } else {
       index++;
