@@ -1,3 +1,4 @@
+
 const isArray = value => Array.isArray(value);
 
 const areArrayEqual = (array1, array2) => {
@@ -116,7 +117,7 @@ function testListConstellations() {
 }
 
 function testAll() {
-  // testCountRibbons();
+  testCountRibbons();
   testListConstellations();
 }
 
