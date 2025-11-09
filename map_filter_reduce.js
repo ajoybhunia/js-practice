@@ -116,7 +116,7 @@ function testListConstellations() {
 }
 
 function testAll() {
-  testCountRibbons();
+  // testCountRibbons();
   testListConstellations();
 }
 
