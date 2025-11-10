@@ -14,14 +14,12 @@ const reverse = (reversed, element) => {
 const frequency = (occurrences, element) => {
   const occurrence = occurrences.find((x) => x[0] === element);
 
-  /*   if (occurrence !== undefined) {
-      occurrence[1] += 1;
-      return occurrences;
-    }
+  if (occurrence !== undefined) {
+    occurrence[1] += 1;
+    return occurrences;
+  }
 
-    occurrences.push([element, 1]); */
-
-  occurrence ? occurrence[1]++ : occurrences.push([element, 1]);
+  occurrences.push([element, 1]);
 
   return occurrences;
 };
@@ -770,11 +768,11 @@ const q86 = [12, 23, 34, 50];
 const isExactly50 = q86.some((x) => x === 50);
 console.log("86.", isExactly50);
 
-// // ### 87. pH Value Validation
-// // Ensure all pH values recorded are below 8.
-// const q87 =
-// const a87 = q87
-// console.log("87.", a87);
+// ### 87. pH Value Validation
+// Ensure all pH values recorded are below 8.
+const q87 = [1.2, 3.2, 1, 7, 3];
+const arePhBelow8 = q87.every((x) => x < 8);
+console.log("87.", arePhBelow8);
 
 // // ### 88. Unique Chocolate Flavors
 // // Count unique flavors tasted in a chocolate workshop.
