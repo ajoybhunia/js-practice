@@ -776,7 +776,7 @@ console.log("87.", arePhBelow8);
 
 // // ### 88. Unique Chocolate Flavors
 // // Count unique flavors tasted in a chocolate workshop.
-// const q88 =
+// const q88 = ['flavor1', 'flavour2', ]
 // const a88 = q88
 // console.log("88.", a88);
 
