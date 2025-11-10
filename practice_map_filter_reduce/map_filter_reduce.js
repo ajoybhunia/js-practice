@@ -2,7 +2,7 @@ const uniqueElements = (data, element) => {
   if (!data.includes(element)) {
     data.push(element);
   }
-localStorage
+  localStorage;
   return data;
 };
 
