@@ -11,7 +11,7 @@ const reverse = (reversed, element) => {
   return reversed;
 };
 
-const frequency = (occurrences, element) => {
+const distinct = (occurrences, element) => {
   const occurrence = occurrences.find((x) => x[0] === element);
 
   if (occurrence !== undefined) {
@@ -593,7 +593,7 @@ const q65 = [
   "ha",
   "ha",
 ];
-const frequencyOfWords = q65.reduce(frequency, []);
+const frequencyOfWords = q65.reduce(distinct, []);
 console.log("65.", frequencyOfWords);
 
 // ### 66. Note "Fa" Check
@@ -680,7 +680,7 @@ console.log("75.", uniquePlants);
 // ### 76. Specific Sound Occurrence Count
 // Count occurrences of a specific sound in a phonetics study.
 const q76 = ["s1", "s2", "s1", "s3", "s2", "s1"];
-const occurrencesOfSounds = q76.reduce(frequency, []);
+const occurrencesOfSounds = q76.reduce(distinct, []);
 console.log("76.", occurrencesOfSounds);
 
 // ### 77. Combined Syllables
@@ -712,7 +712,7 @@ console.log("79.", isAllLessThan10);
 const q80 = [["black", "white"], ["red", "black"], ["white", "red"]];
 const frequencyOfColors = q80
   .flatMap((x) => x)
-  .reduce(frequency, []);
+  .reduce(distinct, []);
 
 console.log("80.", frequencyOfColors);
 
@@ -774,83 +774,94 @@ const q87 = [1.2, 3.2, 1, 7, 3];
 const arePhBelow8 = q87.every((x) => x < 8);
 console.log("87.", arePhBelow8);
 
-// // ### 88. Unique Chocolate Flavors
-// // Count unique flavors tasted in a chocolate workshop.
-// const q88 = ['flavor1', 'flavour2', ]
-// const a88 = q88
-// console.log("88.", a88);
+// ### 88. Unique Chocolate Flavors
+// Count unique flavors tasted in a chocolate workshop.
+const q88 = ["mint", "dark", "milk", "dark", "hazelnut", "mint"];
+const totalUniqueFlavors = q88.reduce(distinct, []).length;
+console.log("88.", totalUniqueFlavors);
 
-// // ### 89. Meditation Time Sum
-// // Sum all minutes of meditation logged across sessions.
-// const q89 =
-// const a89 = q89
-// console.log("89.", a89);
+// ### 89. Meditation Time Sum
+// Sum all minutes of meditation logged across sessions.
+const q89 = [10, 20, 15, 30];
+const totalTime = q89.reduce((x, y) => x + y, 0);
+console.log("89.", totalTime);
 
-// // ### 90. Unique Repair Tools
-// // Identify every unique tool used in a repair workshop.
-// const q90 =
-// const a90 = q90
-// console.log("90.", a90);
+// ### 90. Unique Repair Tools
+// Identify every unique tool used in a repair workshop.
+const q90 = [["hammer", "wrench"], ["screwdriver"], ["hammer", "pliers"]];
+const uniqueTools = q90
+  .flatMap((x) => x)
+  .reduce(distinct, []);
 
-// // ### 91. White Shirt Count
-// // Count how many shirts in a laundry batch were listed as “white”.
-// const q91 =
-// const a91 = q91
-// console.log("91.", a91);
+console.log("90.", uniqueTools);
 
-// // ### 92. Combined Meeting Notes
-// // Combine all notes written during a meeting into one list.
-// const q92 =
-// const a92 = q92
-// console.log("92.", a92);
+// ### 91. White Shirt Count
+// Count how many shirts in a laundry batch were listed as “white”.
+const q91 = ["white", "blue", "white", "green", "white"];
+const countWhite = q91.reduce(
+  (count, color) => color === "white" ? count + 1 : count,
+  0,
+);
+console.log("91.", countWhite);
 
-// // ### 93. "Fragile" Item Check
-// // Check if any item in a shipment is marked “fragile”.
-// const q93 =
-// const a93 = q93
-// console.log("93.", a93);
+// ### 92. Combined Meeting Notes
+// Combine all notes written during a meeting into one list.
+const q92 = [["agenda", "discussion"], ["budget"], ["action", "summary"]];
+const combinedNotes = q92.flatMap((x) => x);
+console.log("92.", combinedNotes);
 
-// // ### 94. Lowercase Letter Validation
-// // Verify that all letters written by participants are lowercase.
-// const q94 =
-// const a94 = q94
-// console.log("94.", a94);
+// ### 93. "Fragile" Item Check
+// Check if any item in a shipment is marked “fragile”.
+const q93 = ["heavy", "fragile", "solid"];
+const isAnyItemFragile = q93.some((x) => x === "fragile");
+console.log("93.", isAnyItemFragile);
 
-// // ### 95. Reverse Chess Moves
-// // Reverse a list of moves recorded during a chess game.
-// const q95 =
-// const a95 = q95
-// console.log("95.", a95);
+// ### 94. Lowercase Letter Validation
+// Verify that all letters written by participants are lowercase.
+const q94 = ["a", "b", "c", "d"];
+const areAllLowercase = q94.every((letter) => letter.toLowerCase() === letter);
+console.log("94.", areAllLowercase);
 
-// // ### 96. Musical Note Frequency
-// // Build a frequency list for musical notes practiced in a session.
-// const q96 =
-// const a96 = q96
-// console.log("96.", a96);
+// ### 95. Reverse Chess Moves
+// Reverse a list of moves recorded during a chess game.
+const q95 = ["e4", "e5", "Nf3", "Nc6"];
+const reversedMoves = q95.reduce(reverse, []);
+console.log("95.", reversedMoves);
 
-// // ### 97. Error Message Count
-// // Count the number of times “error” appears in a log of messages.
-// const q97 =
-// const a97 = q97
-// console.log("97.", a97);
+// ### 96. Musical Note Frequency
+// Build a frequency list for musical notes practiced in a session.
+const q96 = ["A", "B", "A", "C", "B", "A"];
+const frequencyOfNotes = q96.reduce(distinct, []);
+console.log("96.", frequencyOfNotes);
 
-// // ### 98. Gather All Ingredients
-// // Gather all ingredients used in three versions of the same dish.
-// const q98 =
-// const a98 = q98
-// console.log("98.", a98);
+// ### 97. Error Message Count
+// Count the number of times “error” appears in a log of messages.
+const q97 = ["ok", "error", "fail", "error", "error"];
+const countError = q97.reduce(
+  (count, message) => message === "error" ? count + 1 : count,
+  0,
+);
+console.log("97.", countError);
 
-// // ### 99. Skipped Activity Check
-// // Check if any student skipped all activity sessions.
-// const q99 =
-// const a99 = q99
-// console.log("99.", a99);
+// ### 98. Gather All Ingredients
+// Gather all ingredients used in three versions of the same dish.
+const q98 = [["flour", "eggs"], ["milk", "sugar"], ["flour", "butter"]];
+const allIngredients = q98.flatMap((x) => x);
+console.log("98.", allIngredients);
 
-// // ### 100. Distinct Hummed Songs
-// // Create a list of distinct songs hummed by children on a bus ride.
-// const q100 =
-// const a100 = q100
-// console.log("100.", a100);
+// ### 99. Skipped Activity Check
+// Check if any student skipped all activity sessions.
+const q99 = [[true, false], [false, false], [true, true]];
+const isAnyStudentSkippedAll = q99.some((list) =>
+  list.every((isSkip) => isSkip === false)
+);
+console.log("99.", isAnyStudentSkippedAll);
+
+// ### 100. Distinct Hummed Songs
+// Create a list of distinct songs hummed by children on a bus ride.
+const q100 = ["song1", "song2", "song1", "song3", "song2"];
+const distinctSongs = q100.reduce(distinct, []);
+console.log("100.", distinctSongs);
 
 // Write a function that can take an array of sentences and return all the words that start with 'a' (regardless of case)
 // const sentences = [
