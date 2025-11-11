@@ -864,12 +864,12 @@ const distinctSongs = q100.reduce(distinct, []);
 console.log("100.", distinctSongs);
 
 // Write a function that can take an array of sentences and return all the words that start with 'a' (regardless of case)
-// const sentences = [
-//   'just a phrase',
-//   'also another phrase',
-//   'arbitrary phrase',
-//   'An interesting phrase'
-// ];
+const sentences = [
+  'just a phrase',
+  'also another phrase',
+  'arbitrary phrase',
+  'An interesting phrase'
+];
 
 // Output:
 
