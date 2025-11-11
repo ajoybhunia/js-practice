@@ -865,12 +865,13 @@ console.log("100.", distinctSongs);
 
 // Write a function that can take an array of sentences and return all the words that start with 'a' (regardless of case)
 const sentences = [
-  'just a phrase',
-  'also another phrase',
-  'arbitrary phrase',
-  'An interesting phrase'
+  "just a phrase",
+  "also another phrase",
+  "arbitrary phrase",
+  "An interesting phrase",
 ];
+const words = (text) => text.split(" ");
+const startsWithA = (word) => word.toLowerCase().startsWith("a");
+const wordsStartsWithA = sentences.flatMap(words).filter(startsWithA);
 
-// Output:
-
-// [ "a", "also", "another", "arbitrary", "An" ]
+console.log(wordsStartsWithA);
