@@ -2,7 +2,7 @@ const createScreen = (width, hight) => {
   const screen = [];
 
   for (let index = 0; index < hight; index++) {
-    screen.push(" ".repeat(width).split(""));
+    screen.push([..." ".repeat(width)]);
   }
 
   return screen;
