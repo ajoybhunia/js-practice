@@ -7,9 +7,7 @@ export const isValid = (row) => {
 
   for (const cell of row) {
     if (cell !== "") {
-      if (!regex.test(cell)) return false;
-      if (seen.includes(cell)) return false;
-
+      if (!regex.test(cell) || seen.includes(cell)) return false;
       seen.push(cell);
     }
   }
