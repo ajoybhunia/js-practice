@@ -61,12 +61,12 @@ function graph(size) {
       //   cell[row][col] = '•';
       // }
 
-      hyperbola([row, col], [20, 25], 2, 3);
+      // hyperbola([row, col], [20, 25], 2, 3);
       // if ((sqr(row - 20) / 4) - (sqr(col - 15) / 9) < 1) {
       //   cell[row][col] = '•';
       // }
 
-      // parabola([row, col], [15, 20], 1.2);
+      parabola([row, col], [15, 20], 1.2);
       // if (sqr(col - 20) <= 4 * 1 * (row - 15)) {
       //   cell[row][col] = '•';
       // }
