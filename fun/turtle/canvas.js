@@ -14,12 +14,6 @@ class Turtle {
     this.screen = screen;
   }
 
-  // XX XX pp XX XX
-  // XX XX XX XX XX
-  // XX XX oo XX XX
-  // XX XX XX XX XX
-  // XX XX XX XX XX
-
   move(steps) {
     const angle = toRadian(this.angle);
     const dx = Math.cos(angle) * steps;

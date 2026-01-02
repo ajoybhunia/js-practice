@@ -3,7 +3,7 @@ import { plotPoint } from "./drawScreen.js";
 const [r, g, b] = [0, 0, 0];
 const ICON = `\x1b[48;2;${r};${g};${b}m  \x1b[0m`;
 
-const toRadian = (degree) => (Math.PI / 180) * degree;
+export const toRadian = (degree) => (Math.PI / 180) * degree;
 
 export const line = (p1, p2, screen, icon = ICON) => {
   const deltaX = Math.abs(p2.x - p1.x);
