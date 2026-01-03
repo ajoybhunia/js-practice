@@ -1,16 +1,18 @@
 import { Turtle } from "../turtle/turtle.js";
 import { createScreen, displayScreen } from "../screen/draw_screen.js";
 
-const screen = createScreen({ height: 300, width: 300 });
-const turtle = new Turtle(screen.width / 2, screen.height, screen, 90);
-const SIDE = 5;
-const ANGLE = 45;
+const screen = createScreen({ height: 500, width: 500 });
+const turtle = new Turtle(100, screen.height - 20, screen, 90);
+const SIDE = 4;
+const ANGLE = 25;
 
 const conversionFormula = {
-  "1": "11",
-  "0": "1[0]0",
+  "X": "F+[[X]-X]-F[-FX]+X",
+  "F": "FF",
   "[": "[",
   "]": "]",
+  "+": "+",
+  "-": "-",
 };
 
 const moveOneGeneration = (pattern) =>
@@ -18,8 +20,12 @@ const moveOneGeneration = (pattern) =>
 
 const action = (record, turtle) => {
   return {
-    1: () => turtle.move(SIDE),
-    0: () => turtle.move(SIDE),
+    "F": () => turtle.move(SIDE),
+    "X": () => {
+      return;
+    },
+    "+": () => turtle.rotate(ANGLE, false),
+    "-": () => turtle.rotate(ANGLE, true),
     "[": () => {
       record.push({ x: turtle.x, y: turtle.y, angle: turtle.angle });
       turtle.rotate(ANGLE, false);
@@ -40,14 +46,14 @@ const action = (record, turtle) => {
 
 const drawPattern = (pattern, turtle) => {
   const positionStack = [];
-  
+
   for (const instruction of pattern) {
     action(positionStack, turtle)[instruction]();
   }
 };
 
 const main = (turtle) => {
-  const pattern = [["0"]];
+  const pattern = [["-", "X"]];
 
   for (let index = 0; index < 6; index++) {
     pattern.push(moveOneGeneration(pattern[index]));
