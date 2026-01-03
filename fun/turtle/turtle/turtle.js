@@ -18,11 +18,7 @@ export class Turtle {
     this.x += dx;
     this.y += dy;
 
-    line(
-      prev,
-      { x: this.x, y: this.y },
-      this.screen,
-    );
+    line(prev, { x: this.x, y: this.y }, this.screen);
   }
   rotate(angle, clockWise = true) {
     this.angle = clockWise ? this.angle + angle : this.angle - angle;
