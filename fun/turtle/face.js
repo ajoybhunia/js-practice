@@ -1,7 +1,7 @@
-import { createScreen, displayScreen } from "./drawScreen.js";
-import { arc, circle, pieceOfCake, polygon } from "./shapes.js";
+import { createScreen, displayScreen } from "./screen/draw_screen.js";
+import { arc, circle, pieceOfCake, polygon } from "./turtle/shapes.js";
 
-const configData = await Deno.readTextFile("./canvasConfig.json");
+const configData = await Deno.readTextFile("./turtle/config.json");
 const config = JSON.parse(configData);
 
 const screen = createScreen(config);

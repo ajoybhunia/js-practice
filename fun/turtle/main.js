@@ -1,19 +1,19 @@
-const fractalTree = {
-  "0": "1[0]0",
-  "1": "11",
-  "[": "[",
-  "]": "]",
-};
+import { Turtle } from "./turtle/turtle.js";
+import { createScreen, displayScreen } from "./screen/draw_screen.js";
 
-const moveOneGeneration = (pattern) =>
-  [...pattern].flatMap((each) => [...fractalTree[each]]);
+const configData = await Deno.readTextFile("./turtle/config.json");
+const config = JSON.parse(configData);
 
-const pattern = [["0"]];
+const screen = createScreen(config);
 
-for (let index = 0; index < 3; index++) {
-  pattern.push(moveOneGeneration(pattern[index]));
-}
+const turtle = new Turtle(screen.width / 2, screen.height / 2, screen);
 
-console.log(pattern.join("\n"));
+turtle.move(20);
+turtle.rotate(90, true);
+turtle.move(20);
+turtle.rotate(90, false);
+turtle.move(20);
+turtle.rotate(45, false);
+turtle.move(20);
 
-// console.log(moveOneGeneration([ "1", "[", "0", "]", "0" ]));
+displayScreen(screen);
