@@ -6,15 +6,13 @@ const ICON = `\x1b[48;2;${r};${g};${b}m  \x1b[0m`;
 export const toRadian = (degree) => (Math.PI / 180) * degree;
 
 export const line = (p1, p2, screen, icon = ICON) => {
-  const deltaX = Math.abs(p2.x - p1.x);
-  const deltaY = Math.abs(p2.y - p1.y);
+  const deltaX = p2.x - p1.x;
+  const deltaY = p2.y - p1.y;
 
-  const largerKey = deltaX > deltaY ? "x" : "y";
+  const jumps = Math.max(Math.abs(deltaX), Math.abs(deltaY));
 
-  const jumps = Math.abs(p2[largerKey] - p1[largerKey]);
-
-  const dx = (p2.x - p1.x) / jumps;
-  const dy = (p2.y - p1.y) / jumps;
+  const dx = deltaX / jumps;
+  const dy = deltaY / jumps;
 
   let x = p1.x;
   let y = p1.y;
