@@ -1,8 +1,8 @@
 import { Turtle } from "../turtle/turtle.js";
 import { createScreen, displayScreen } from "../screen/draw_screen.js";
 
-const screen = createScreen({ height: 500, width: 500 });
-const turtle = new Turtle(100, screen.height - 20, screen, 90);
+const screen = createScreen({ height: 600, width: 600 });
+const turtle = new Turtle(30, screen.height, screen, 90);
 const SIDE = 4;
 const ANGLE = 25;
 
@@ -28,7 +28,7 @@ const action = (record, turtle) => {
     "-": () => turtle.rotate(ANGLE, true),
     "[": () => {
       record.push({ x: turtle.x, y: turtle.y, angle: turtle.angle });
-      turtle.rotate(ANGLE, false);
+      // turtle.rotate(ANGLE, false);
     },
     "]": () => {
       const history = record.pop({
@@ -39,7 +39,7 @@ const action = (record, turtle) => {
       turtle.x = history.x;
       turtle.y = history.y;
       turtle.angle = history.angle;
-      turtle.rotate(ANGLE, true);
+      // turtle.rotate(ANGLE, true);
     },
   };
 };

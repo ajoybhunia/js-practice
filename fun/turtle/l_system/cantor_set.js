@@ -37,10 +37,10 @@ const drawPattern = (pattern, turtle) => {
 const main = (turtle) => {
   const pattern = [["A"]];
 
-  for (let index = 0; index < 5; index++) {
+  for (let index = 0; index < 2; index++) {
     pattern.push(moveOneGeneration(pattern[index]));
   }
-
+  
   drawPattern(pattern.at(-1), turtle);
 };
 

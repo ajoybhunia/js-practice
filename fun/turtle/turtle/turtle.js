@@ -6,7 +6,7 @@ export class Turtle {
     this.y = y;
     this.angle = 360 - angle;
     this.screen = screen;
-    this.penIsDown = true;
+    this.isPenDown = true;
   }
 
   move(steps) {
@@ -19,7 +19,7 @@ export class Turtle {
     this.x += dx;
     this.y += dy;
 
-    if (this.penIsDown) {
+    if (this.isPenDown) {
       line(prev, { x: this.x, y: this.y }, this.screen);
     }
   }
@@ -29,10 +29,10 @@ export class Turtle {
   }
 
   penUp() {
-    this.penIsDown = false;
+    this.isPenDown = false;
   }
 
   penDown() {
-    this.penIsDown = true;
+    this.isPenDown = true;
   }
 }
