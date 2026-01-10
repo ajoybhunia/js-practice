@@ -1,4 +1,4 @@
-import { API_URL } from "./config.js";
+import { API_URL } from "../config.js";
 import * as cache from "./cache.js";
 
 export const getDefinition = async (
