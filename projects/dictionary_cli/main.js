@@ -1,17 +1,17 @@
-const main = async () => {
-  const cache_path = "./cache.json";
-  const res = await fetch(
-    "https://api.dictionaryapi.dev/api/v2/entries/en/try",
-  );
-  const data = await res.json();
+import { getDefinition } from "./src/dictionary.js";
+import { formatdefinition } from "./src/formatter.js";
 
-  const file = await Deno.open(cache_path, {
-    read: true,
-    write: true,
-    create: true,
-  });
+const main = async (args) => {
+  const word = args[0] || "word";
 
-  await file.write(new TextEncoder().encode(JSON.stringify(data, null, 2)));
+  try {
+    const data = await getDefinition(word);
+    // console.clear();
+    console.log(formatdefinition(data, word));
+  } catch (err) {
+    const errMsg = `${word}: ${err}`;
+    console.error(errMsg);
+  }
 };
 
-main();
+main(Deno.args);

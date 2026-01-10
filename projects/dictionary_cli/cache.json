@@ -1,179 +1,233 @@
-[
-  {
-    "word": "try",
-    "phonetic": "/tɹaɪ/",
-    "phonetics": [
-      {
-        "text": "/tɹaɪ/",
-        "audio": "https://api.dictionaryapi.dev/media/pronunciations/en/try-uk.mp3",
-        "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=9028828",
-        "license": {
-          "name": "BY 3.0 US",
-          "url": "https://creativecommons.org/licenses/by/3.0/us"
-        }
-      },
-      {
-        "text": "/tɹaɪ/",
-        "audio": "https://api.dictionaryapi.dev/media/pronunciations/en/try-us.mp3",
-        "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=1221288",
-        "license": {
-          "name": "BY-SA 3.0",
-          "url": "https://creativecommons.org/licenses/by-sa/3.0"
-        }
-      }
-    ],
-    "meanings": [
-      {
-        "partOfSpeech": "noun",
-        "definitions": [
-          {
-            "definition": "An attempt.",
-            "synonyms": [],
-            "antonyms": [],
-            "example": "I gave unicycling a try but I couldn’t do it."
-          },
-          {
-            "definition": "An act of tasting or sampling.",
-            "synonyms": [],
-            "antonyms": [],
-            "example": "I gave sushi a try but I didn’t like it."
-          },
-          {
-            "definition": "A score in rugby league and rugby union, analogous to a touchdown in American football.",
-            "synonyms": [],
-            "antonyms": [],
-            "example": "Today I scored my first try."
-          },
-          {
-            "definition": "A screen, or sieve, for grain.",
-            "synonyms": [],
-            "antonyms": []
-          },
-          {
-            "definition": "A field goal or extra point",
-            "synonyms": [],
-            "antonyms": []
+{
+  "mountain": [
+    {
+      "word": "mountain",
+      "phonetic": "/ˈmaʊntɪn/",
+      "phonetics": [
+        {
+          "text": "/ˈmaʊntɪn/",
+          "audio": "https://api.dictionaryapi.dev/media/pronunciations/en/mountain-uk.mp3",
+          "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=9023252",
+          "license": {
+            "name": "BY 3.0 US",
+            "url": "https://creativecommons.org/licenses/by/3.0/us"
           }
-        ],
-        "synonyms": [
-          "touchdown",
-          "sampling",
-          "taste",
-          "tasting",
-          "bash",
-          "go",
-          "stab",
-          "whirl",
-          "extra point"
-        ],
-        "antonyms": []
-      },
-      {
-        "partOfSpeech": "verb",
-        "definitions": [
-          {
-            "definition": "To attempt; to endeavour. Followed by infinitive.",
-            "synonyms": [],
-            "antonyms": [],
-            "example": "I tried to rollerblade, but I couldn’t."
-          },
-          {
-            "definition": "To divide; to separate.",
-            "synonyms": [],
-            "antonyms": []
-          },
-          {
-            "definition": "To test, to work out.",
-            "synonyms": [],
-            "antonyms": []
-          },
-          {
-            "definition": "To experiment, to strive.",
-            "synonyms": [],
-            "antonyms": []
-          },
-          {
-            "definition": "To lie to in heavy weather under just sufficient sail to head into the wind.",
-            "synonyms": [],
-            "antonyms": []
-          },
-          {
-            "definition": "To strain; to subject to excessive tests.",
-            "synonyms": [],
-            "antonyms": [],
-            "example": "Repeated failures try one's patience."
-          },
-          {
-            "definition": "(used with another verb) To want",
-            "synonyms": [],
-            "antonyms": [],
-            "example": "I am really not trying to hear you talk about my mama like that."
+        },
+        {
+          "text": "/ˈmaʊntn̩/",
+          "audio": "https://api.dictionaryapi.dev/media/pronunciations/en/mountain-us.mp3",
+          "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=1113610",
+          "license": {
+            "name": "BY-SA 3.0",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0"
           }
-        ],
-        "synonyms": [
-          "attempt",
-          "endeavor",
-          "fand",
-          "mint",
-          "take a run at",
-          "take a stab at",
-          "sample",
-          "taste"
-        ],
-        "antonyms": []
-      }
-    ],
-    "license": {
-      "name": "CC BY-SA 3.0",
-      "url": "https://creativecommons.org/licenses/by-sa/3.0"
-    },
-    "sourceUrls": [
-      "https://en.wiktionary.org/wiki/try"
-    ]
-  },
-  {
-    "word": "try",
-    "phonetic": "/tɹaɪ/",
-    "phonetics": [
-      {
-        "text": "/tɹaɪ/",
-        "audio": "https://api.dictionaryapi.dev/media/pronunciations/en/try-uk.mp3",
-        "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=9028828",
-        "license": {
-          "name": "BY 3.0 US",
-          "url": "https://creativecommons.org/licenses/by/3.0/us"
         }
+      ],
+      "meanings": [
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "An elevation of land of considerable dimensions rising more or less abruptly, forming a conspicuous figure in the landscape, usually having a small extent of surface at its summit.",
+              "synonyms": [],
+              "antonyms": [],
+              "example": "We spent the weekend hiking in the mountains."
+            },
+            {
+              "definition": "Something very large in size or quantity; a huge amount; a great heap.",
+              "synonyms": [],
+              "antonyms": [],
+              "example": "He was a real mountain of a man, standing seven feet tall."
+            },
+            {
+              "definition": "Of, belonging to, relating to, or found on a mountain; like a mountain in size; (of living things) growing or living on a mountain.",
+              "synonyms": [],
+              "antonyms": [],
+              "example": "some mountain ranges; the high mountain top; a scenic mountain view; the mountain lodge; the leaves of mountain cranberries; a mountain goat"
+            },
+            {
+              "definition": "A difficult task or challenge.",
+              "synonyms": [],
+              "antonyms": []
+            },
+            {
+              "definition": "A woman's large breast.",
+              "synonyms": [],
+              "antonyms": []
+            },
+            {
+              "definition": "The twenty-first Lenormand card.",
+              "synonyms": [],
+              "antonyms": []
+            },
+            {
+              "definition": "Wine made from grapes that grow on a mountain.",
+              "synonyms": [],
+              "antonyms": []
+            }
+          ],
+          "synonyms": [],
+          "antonyms": []
+        }
+      ],
+      "license": {
+        "name": "CC BY-SA 3.0",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0"
       },
-      {
-        "text": "/tɹaɪ/",
-        "audio": "https://api.dictionaryapi.dev/media/pronunciations/en/try-us.mp3",
-        "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=1221288",
-        "license": {
-          "name": "BY-SA 3.0",
-          "url": "https://creativecommons.org/licenses/by-sa/3.0"
-        }
-      }
-    ],
-    "meanings": [
-      {
-        "partOfSpeech": "adjective",
-        "definitions": [
-          {
-            "definition": "Fine, excellent.",
-            "synonyms": [],
-            "antonyms": []
+      "sourceUrls": [
+        "https://en.wiktionary.org/wiki/mountain"
+      ]
+    }
+  ],
+  "hill": [
+    {
+      "word": "hill",
+      "phonetic": "/hɪl/",
+      "phonetics": [
+        {
+          "text": "/hɪl/",
+          "audio": "https://api.dictionaryapi.dev/media/pronunciations/en/hill-us.mp3",
+          "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=1239788",
+          "license": {
+            "name": "BY-SA 3.0",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0"
           }
-        ],
-        "synonyms": [],
-        "antonyms": []
-      }
-    ],
-    "license": {
-      "name": "CC BY-SA 3.0",
-      "url": "https://creativecommons.org/licenses/by-sa/3.0"
-    },
-    "sourceUrls": [
-      "https://en.wiktionary.org/wiki/try"
-    ]
-  }
-]
+        }
+      ],
+      "meanings": [
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "An elevated location smaller than a mountain.",
+              "synonyms": [],
+              "antonyms": [],
+              "example": "The park is sheltered from the wind by a hill to the east."
+            },
+            {
+              "definition": "A sloping road.",
+              "synonyms": [],
+              "antonyms": [],
+              "example": "You need to pick up speed to get up the hill that's coming up."
+            },
+            {
+              "definition": "A heap of earth surrounding a plant.",
+              "synonyms": [],
+              "antonyms": []
+            },
+            {
+              "definition": "A single cluster or group of plants growing close together, and having the earth heaped up about them.",
+              "synonyms": [],
+              "antonyms": [],
+              "example": "a hill of corn or potatoes"
+            },
+            {
+              "definition": "The pitcher’s mound.",
+              "synonyms": [],
+              "antonyms": []
+            }
+          ],
+          "synonyms": [],
+          "antonyms": []
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "To form into a heap or mound.",
+              "synonyms": [],
+              "antonyms": []
+            },
+            {
+              "definition": "To heap or draw earth around plants.",
+              "synonyms": [],
+              "antonyms": []
+            }
+          ],
+          "synonyms": [],
+          "antonyms": []
+        }
+      ],
+      "license": {
+        "name": "CC BY-SA 3.0",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0"
+      },
+      "sourceUrls": [
+        "https://en.wiktionary.org/wiki/hill"
+      ]
+    }
+  ],
+  "hut": [
+    {
+      "word": "hut",
+      "phonetic": "/hʌt/",
+      "phonetics": [
+        {
+          "text": "/hʌt/",
+          "audio": "https://api.dictionaryapi.dev/media/pronunciations/en/hut-us.mp3",
+          "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=1762700",
+          "license": {
+            "name": "BY-SA 3.0",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0"
+          }
+        }
+      ],
+      "meanings": [
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "A small, simple one-storey dwelling or shelter, often with just one room, and generally built of readily available local materials.",
+              "synonyms": [],
+              "antonyms": [],
+              "example": "a thatched hut; a mud hut; a shepherd’s hut"
+            },
+            {
+              "definition": "A small wooden shed.",
+              "synonyms": [],
+              "antonyms": [],
+              "example": "a groundsman’s hut"
+            },
+            {
+              "definition": "A small stack of grain.",
+              "synonyms": [],
+              "antonyms": []
+            }
+          ],
+          "synonyms": [],
+          "antonyms": []
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "To provide (someone) with shelter in a hut.",
+              "synonyms": [],
+              "antonyms": [],
+              "example": "to hut troops in winter quarters"
+            },
+            {
+              "definition": "To take shelter in a hut.",
+              "synonyms": [],
+              "antonyms": []
+            },
+            {
+              "definition": "To stack (sheaves of grain).",
+              "synonyms": [],
+              "antonyms": []
+            }
+          ],
+          "synonyms": [],
+          "antonyms": []
+        }
+      ],
+      "license": {
+        "name": "CC BY-SA 3.0",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0"
+      },
+      "sourceUrls": [
+        "https://en.wiktionary.org/wiki/hut"
+      ]
+    }
+  ]
+}
