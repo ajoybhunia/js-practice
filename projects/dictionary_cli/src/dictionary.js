@@ -1,19 +1,19 @@
 import { API_URL } from "./config.js";
 import * as cache from "./cache.js";
 
-const writeOnCache = async (response, word) => {
-  const data = await response.json();
-  await cache.writeCache(word, data);
-
-  return data;
-};
-
-export const getDefinition = async (word) => {
-  const data = await cache.readCache(word);
+export const getDefinition = async (
+  word,
+  cacheModule = cache,
+  fetchFn = fetch,
+) => {
+  const data = await cacheModule.readCache(word);
   if (data) return data;
 
-  const response = await fetch(`${API_URL}${word}`);
-  if (!response.ok) throw "Word not found!";
+  const response = await fetchFn(`${API_URL}${word}`);
+  if (!response.ok) throw new Error("Word not found!");
 
-  return await writeOnCache(response, word);
+  const json = await response.json();
+  await cacheModule.writeCache(word, json);
+
+  return json;
 };

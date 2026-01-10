@@ -9,7 +9,7 @@ const main = async (args) => {
     // console.clear();
     console.log(formatdefinition(data, word));
   } catch (err) {
-    const errMsg = `${word}: ${err}`;
+    const errMsg = `${word}: ${err.message}`;
     console.error(errMsg);
   }
 };
