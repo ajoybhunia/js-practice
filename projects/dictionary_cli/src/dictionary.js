@@ -1,5 +1,6 @@
 import { API_URL } from "../config.js";
 import * as cache from "./cache.js";
+import { normalizeDefinition } from "./normalize.js";
 
 export const getDefinition = async (
   word,
@@ -12,8 +13,8 @@ export const getDefinition = async (
   const response = await fetchFn(`${API_URL}${word}`);
   if (!response.ok) throw new Error("Word not found!");
 
-  const json = await response.json();
-  await cacheModule.writeCache(word, json);
+  const normalized = normalizeDefinition(await response.json());
+  await cacheModule.writeCache(word, normalized);
 
-  return json;
+  return normalized;
 };

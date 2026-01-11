@@ -6,7 +6,7 @@ const main = async (args) => {
 
   try {
     const data = await getDefinition(word);
-    // console.clear();
+    console.clear();
     console.log(formatDefinition(data, word));
   } catch (err) {
     const errMsg = `${word}: ${err.message}`;
