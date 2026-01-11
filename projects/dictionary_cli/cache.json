@@ -44,5 +44,37 @@
         }
       ]
     }
+  ],
+  "hut": [
+    {
+      "word": "hut",
+      "meanings": [
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "A small, simple one-storey dwelling or shelter, often with just one room, and generally built of readily available local materials.",
+              "example": "a thatched hut; a mud hut; a shepherd’s hut"
+            },
+            {
+              "definition": "A small wooden shed.",
+              "example": "a groundsman’s hut"
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "To provide (someone) with shelter in a hut.",
+              "example": "to hut troops in winter quarters"
+            },
+            {
+              "definition": "To take shelter in a hut."
+            }
+          ]
+        }
+      ]
+    }
   ]
 }

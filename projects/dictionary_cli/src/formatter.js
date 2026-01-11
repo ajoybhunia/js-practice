@@ -1,18 +1,18 @@
 export const formatDefinition = (json) => {
   const data = json[0];
-  let output = `\n\t${data.word.toLowerCase()}\n`;
+  const output = [`\n\t${data.word.toLowerCase()}`];
 
   for (const meaning of data.meanings) {
-    output += `\n${meaning.partOfSpeech}\n`;
+    output.push(`\n${meaning.partOfSpeech}`);
 
     meaning.definitions.forEach((def, index) => {
-      output += `  ${index + 1}. ${def.definition}\n`;
+      output.push(`  ${index + 1}. ${def.definition}`);
 
       if (def.example) {
-        output += `     Example -> ${def.example}\n`;
+        output.push(`     Example -> ${def.example}`);
       }
     });
   }
 
-  return output.trimEnd();
+  return output.join("\n");
 };
