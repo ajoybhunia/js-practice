@@ -1,18 +1,16 @@
 {
-  "light": [
+  "word": [
     {
-      "word": "light",
+      "word": "word",
       "meanings": [
         {
           "partOfSpeech": "noun",
           "definitions": [
             {
-              "definition": "Visible electromagnetic radiation. The human eye can typically detect radiation (light) in the wavelength range of about 400 to 750 nanometers. Nearby shorter and longer wavelength ranges, although not visible, are commonly called ultraviolet and infrared light.",
-              "example": "As you can see, this spacious dining-room gets a lot of light in the mornings."
+              "definition": "The smallest unit of language that has a particular meaning and can be expressed by itself; the smallest discrete, meaningful unit of language. (contrast morpheme.)"
             },
             {
-              "definition": "A source of illumination.",
-              "example": "Put that light out!"
+              "definition": "Something like such a unit of language:"
             }
           ]
         },
@@ -20,12 +18,386 @@
           "partOfSpeech": "verb",
           "definitions": [
             {
-              "definition": "To start (a fire).",
-              "example": "We lit the fire to get some heat."
+              "definition": "To say or write (something) using particular words; to phrase (something).",
+              "example": "I’m not sure how to word this letter to the council."
             },
             {
-              "definition": "To set fire to; to set burning.",
-              "example": "She lit her last match."
+              "definition": "To flatter with words, to cajole."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "interjection",
+          "definitions": [
+            {
+              "definition": "Truth, indeed, that is the truth! The shortened form of the statement \"My word is my bond.\"",
+              "example": "\"Yo, that movie was epic!\" / \"Word?\" (\"You speak the truth?\") / \"Word.\" (\"I speak the truth.\")"
+            },
+            {
+              "definition": "(stereotypically) An abbreviated form of word up; a statement of the acknowledgment of fact with a hint of nonchalant approval."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "(except in set phrases) To be, become, betide.",
+              "example": "Well worth thee, me friend."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "table": [
+    {
+      "word": "table",
+      "meanings": [
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "Furniture with a top surface to accommodate a variety of uses."
+            },
+            {
+              "definition": "A two-dimensional presentation of data."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "To tabulate; to put into a table or grid.",
+              "example": "to table fines"
+            },
+            {
+              "definition": "To supply (a guest, client etc.) with food at a table; to feed."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pillar": [
+    {
+      "word": "pillar",
+      "meanings": [
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "A large post, often used as supporting architecture."
+            },
+            {
+              "definition": "Something resembling such a structure.",
+              "example": "a pillar of smoke"
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "To provide with pillars or added strength as if from pillars."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "apple": [
+    {
+      "word": "apple",
+      "meanings": [
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "A common, round fruit produced by the tree Malus domestica, cultivated in temperate climates."
+            },
+            {
+              "definition": "Any of various tree-borne fruits or vegetables especially considered as resembling an apple; also (with qualifying words) used to form the names of other specific fruits such as custard apple, rose apple, thorn apple etc."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "To become apple-like."
+            },
+            {
+              "definition": "To form buds."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "copy": [
+    {
+      "word": "copy",
+      "meanings": [
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "The result of copying; an identical duplicate of an original.",
+              "example": "Please bring me the copies of those reports."
+            },
+            {
+              "definition": "An imitation, sometimes of inferior quality.",
+              "example": "That handbag is a copy. You can tell because the buckle is different."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "To produce an object identical to a given object.",
+              "example": "Please copy these reports for me."
+            },
+            {
+              "definition": "To give or transmit a copy to (a person).",
+              "example": "Make sure you copy me on that important memo."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "notebook": [
+    {
+      "word": "notebook",
+      "meanings": [
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "A book in which notes or memoranda are written."
+            },
+            {
+              "definition": "Short for notebook computer."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "good": [
+    {
+      "word": "good",
+      "meanings": [
+        {
+          "partOfSpeech": "adjective",
+          "definitions": [
+            {
+              "definition": "(of people)"
+            },
+            {
+              "definition": "(of capabilities)"
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "interjection",
+          "definitions": [
+            {
+              "definition": "That is good; an elliptical exclamation of satisfaction or commendation.",
+              "example": "Good! I can leave now."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "adverb",
+          "definitions": [
+            {
+              "definition": "Well; satisfactorily or thoroughly.",
+              "example": "The boy done good. (did well)"
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "The forces or behaviours that are the enemy of evil. Usually consists of helping others and general benevolence."
+            },
+            {
+              "definition": "A result that is positive in the view of the speaker."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "love": [
+    {
+      "word": "love",
+      "meanings": [
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "Strong affection."
+            },
+            {
+              "definition": "A person who is the object of romantic feelings; a darling, a sweetheart, a beloved."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "(usually transitive, sometimes intransitive, stative) To have a strong affection for (someone or something).",
+              "example": "I love my spouse.   I love you!"
+            },
+            {
+              "definition": "To need, thrive on.",
+              "example": "Mold loves moist, dark places."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "To praise; commend."
+            },
+            {
+              "definition": "To praise as of value; prize; set a price on."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "(racquet sports) Zero, no score.",
+              "example": "So that’s fifteen-love to Kournikova."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "cat": [
+    {
+      "word": "cat",
+      "meanings": [
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "An animal of the family Felidae:"
+            },
+            {
+              "definition": "A person:"
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "To hoist (the anchor) by its ring so that it hangs at the cathead."
+            },
+            {
+              "definition": "To flog with a cat-o'-nine-tails."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "A twin-hulled ship or boat."
+            },
+            {
+              "definition": "A quarrelsome woman; a scold."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "A program and command in Unix that reads one or more files and directs their content to the standard output."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "To apply the cat command to (one or more files)."
+            },
+            {
+              "definition": "To dump large amounts of data on (an unprepared target) usually with no intention of browsing it carefully."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "relic": [
+    {
+      "word": "relic",
+      "meanings": [
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "That which remains; that which is left after loss or decay; a remaining portion."
+            },
+            {
+              "definition": "Something old and outdated, possibly kept for sentimental reasons."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "(often of guitars) To cause (an object) to appear old or worn, to distress."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "happy": [
+    {
+      "word": "happy",
+      "meanings": [
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "A happy event, thing, person, etc."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "Preceded by the: happy people as a group."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "Often followed by up: to become happy; to brighten up, to cheer up."
+            },
+            {
+              "definition": "Often followed by up: to make happy; to brighten, to cheer, to enliven."
             }
           ]
         },
@@ -33,32 +405,31 @@
           "partOfSpeech": "adjective",
           "definitions": [
             {
-              "definition": "Having light; bright; clear; not dark or obscure.",
-              "example": "The room is light when the Sun shines through the window."
+              "definition": "Having a feeling arising from a consciousness of well-being or of enjoyment; enjoying good of any kind, such as comfort, peace, or tranquillity; blissful, contented, joyous.",
+              "example": "Music makes me feel happy."
             },
             {
-              "definition": "Pale or whitish in color; highly luminous and more or less deficient in chroma.",
-              "example": "She had light skin."
+              "definition": "Experiencing the effect of favourable fortune; favored by fortune or luck; fortunate, lucky, propitious."
             }
           ]
         }
       ]
     }
   ],
-  "hut": [
+  "king": [
     {
-      "word": "hut",
+      "word": "king",
       "meanings": [
         {
           "partOfSpeech": "noun",
           "definitions": [
             {
-              "definition": "A small, simple one-storey dwelling or shelter, often with just one room, and generally built of readily available local materials.",
-              "example": "a thatched hut; a mud hut; a shepherd’s hut"
+              "definition": "A male monarch; a man who heads a monarchy. If it's an absolute monarchy, then he is the supreme ruler of his nation.",
+              "example": "Henry VIII was the king of England from 1509 to 1547."
             },
             {
-              "definition": "A small wooden shed.",
-              "example": "a groundsman’s hut"
+              "definition": "A powerful or majorly influential person.",
+              "example": "Howard Stern styled himself as the \"king of all media\"."
             }
           ]
         },
@@ -66,11 +437,75 @@
           "partOfSpeech": "verb",
           "definitions": [
             {
-              "definition": "To provide (someone) with shelter in a hut.",
-              "example": "to hut troops in winter quarters"
+              "definition": "To crown king, to make (a person) king."
             },
             {
-              "definition": "To take shelter in a hut."
+              "definition": "To rule over as king."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "A sounding stone, a Chinese musical instrument."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "benevolent": [
+    {
+      "word": "benevolent",
+      "meanings": [
+        {
+          "partOfSpeech": "adjective",
+          "definitions": [
+            {
+              "definition": "Having a disposition to do good.",
+              "example": "Chinese and Eastern mythologies describe dragons as benevolent."
+            },
+            {
+              "definition": "Possessing or manifesting love for mankind."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "lemon": [
+    {
+      "word": "lemon",
+      "meanings": [
+        {
+          "partOfSpeech": "noun",
+          "definitions": [
+            {
+              "definition": "A yellowish citrus fruit."
+            },
+            {
+              "definition": "A semitropical evergreen tree, Citrus limon, that bears such fruits."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "verb",
+          "definitions": [
+            {
+              "definition": "To flavour with lemon.",
+              "example": "You can start the vegetables cooking while you are lemoning the fish."
+            }
+          ]
+        },
+        {
+          "partOfSpeech": "adjective",
+          "definitions": [
+            {
+              "definition": "Containing or having the flavour/flavor and/or scent of lemons."
+            },
+            {
+              "definition": "Of the pale yellow colour/color of lemons."
             }
           ]
         }

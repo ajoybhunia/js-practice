@@ -5,7 +5,7 @@ export const fakeApiResponse = [
       {
         partOfSpeech: "noun",
         definitions: [
-          { definition: "The act of moving" },
+          { definition: "The act of moving", example: "example of movement" },
         ],
       },
     ],
