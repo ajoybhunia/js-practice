@@ -19,7 +19,7 @@ const asyncDraw = async (grid, size = 25) => {
 
   for (const part of parts) {
     console.log(part.map((row) => row.join("")).join("\n"));
-    await sleep(300);
+    await sleep(50);
   }
 };
 

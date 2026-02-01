@@ -1,6 +1,6 @@
 import { plotPoint } from "../screen/draw_screen.js";
 
-const [r, g, b] = [0, 255, 0];
+const [r, g, b] = [255, 0 , 0];
 const ICON = `\x1b[48;2;${r};${g};${b}m  \x1b[0m`;
 
 export const toRadian = (degree) => (Math.PI / 180) * degree;
