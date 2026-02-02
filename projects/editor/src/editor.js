@@ -71,6 +71,21 @@ const handleNormal = (key) => {
       buffer.lines[cursorPos.row].length,
       cursorPos.col + 1,
     );
+
+    return;
+  }
+
+  if (key === "j") {
+    cursorPos.row = Math.min(cursorPos.row + 1, buffer.lines.length);
+    cursorPos.col = Math.min(cursorPos.col, buffer.lines[cursorPos.row].length);
+
+    return;
+  }
+
+  if (key === "k") {
+    cursorPos.row = Math.max(cursorPos.row - 1, 0);
+    cursorPos.col = Math.min(cursorPos.col, buffer.lines[cursorPos.row].length);
+
     return;
   }
 };
