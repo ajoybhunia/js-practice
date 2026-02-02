@@ -6,9 +6,7 @@ const edit = async (file) => {
 
   // await file.read()
 
-  const encoder = new TextEncoder();
   const writer = file.writable.getWriter();
-
   await writer.write(encoder.encode(content));
 };
 
@@ -29,12 +27,8 @@ const moveCursor = async (row, col) => await write(`\x1b[${row};${col}H`);
 const render = async () => {
   await clearScreen();
 
-  for (const str of buffer.lines) {
-    await write(str + "\r\n");
-  }
-
-  await write(`-- ${mode} --`);
-  await write("\x1b[0m");
+  await write(buffer.lines.join("\n"));
+  await write(`-- ${mode} --\x1b[0m`);
 
   await moveCursor(cursorPos.row + 1, cursorPos.col + 1);
 };
