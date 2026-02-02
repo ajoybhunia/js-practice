@@ -27,7 +27,7 @@ const moveCursor = async (row, col) => await write(`\x1b[${row};${col}H`);
 const render = async () => {
   await clearScreen();
 
-  await write(buffer.lines.join("\n"));
+  await write(buffer.lines.join("\n") + "\n");
   await write(`-- ${mode} --\x1b[0m`);
 
   await moveCursor(cursorPos.row + 1, cursorPos.col + 1);
@@ -70,7 +70,7 @@ const handleNormal = (key) => {
   }
 
   if (key === "j") {
-    cursorPos.row = Math.min(cursorPos.row + 1, buffer.lines.length);
+    cursorPos.row = Math.min(cursorPos.row + 1, buffer.lines.length - 1);
     cursorPos.col = Math.min(cursorPos.col, buffer.lines[cursorPos.row].length);
 
     return;
