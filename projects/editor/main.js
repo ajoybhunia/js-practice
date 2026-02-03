@@ -15,7 +15,7 @@ const main = async () => {
     await editor(running);
   }
 
-  clearScreen();
+  // clearScreen();
 };
 
 main();

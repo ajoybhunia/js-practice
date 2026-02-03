@@ -12,7 +12,7 @@ const edit = async (file) => {
 
 Deno.stdin.setRaw(true);
 
-const modes = { normal: "NORMAL", insert: "INSERT" };
+const modes = { normal: "NORMAL", insert: "INSERT", cmdline: ":" };
 let mode = modes.normal;
 
 const buffer = { lines: [""] };
@@ -33,25 +33,19 @@ const render = async () => {
   await moveCursor(cursorPos.row + 1, cursorPos.col + 1);
 };
 
-const insertChar = (char) => {
-  const line = buffer.lines[cursorPos.row];
-  buffer.lines[cursorPos.row] = line.slice(0, cursorPos.col) + char +
-    line.slice(cursorPos.col);
-  cursorPos.col++;
-};
-
-const deleteChar = () => {
-  if (cursorPos.col === 0) return;
-
-  const line = buffer.lines[cursorPos.row];
-  buffer.lines[cursorPos.row] = line.slice(0, cursorPos.col - 1) +
-    line.slice(cursorPos.col);
-  cursorPos.col--;
-};
-
-const handleNormal = (key) => {
+const handleNormal = async (key) => {
   if (key === "i") {
     mode = modes.insert;
+    return;
+  }
+
+  if (key === ":") {
+    mode = modes.cmdline;
+    cursorPos.row = buffer.lines.length;
+    cursorPos.col = 4;
+
+    await moveCursor(cursorPos.row, cursorPos.col);
+    await render();
     return;
   }
 
@@ -84,6 +78,22 @@ const handleNormal = (key) => {
   }
 };
 
+const insertChar = (char) => {
+  const line = buffer.lines[cursorPos.row];
+  buffer.lines[cursorPos.row] = line.slice(0, cursorPos.col) + char +
+    line.slice(cursorPos.col);
+  cursorPos.col++;
+};
+
+const deleteChar = () => {
+  if (cursorPos.col === 0) return;
+
+  const line = buffer.lines[cursorPos.row];
+  buffer.lines[cursorPos.row] = line.slice(0, cursorPos.col - 1) +
+    line.slice(cursorPos.col);
+  cursorPos.col--;
+};
+
 const handleInsert = (key) => {
   if (key === "\x1b") {
     mode = modes.normal;
@@ -111,8 +121,27 @@ const handleInsert = (key) => {
   insertChar(key);
 };
 
+
+const handleCmd = async (key) => {
+  if (key === "\x1b") {
+    mode = modes.normal;
+    return;
+  }
+  
+  // keys.push(key);
+  
+  // console.log(buffer);
+  
+  // cursorPos.row = buffer.lines.length;
+  // cursorPos.col = 4;
+  
+  // await moveCursor(cursorPos.row, cursorPos.col);
+  // await render();
+};
+
 export const editor = async (running) => {
   await render();
+  // const keys = [];
 
   const buf = new Uint8Array(8);
   const n = await Deno.stdin.read(buf);
@@ -125,5 +154,7 @@ export const editor = async (running) => {
     return;
   }
 
-  mode === modes.normal ? handleNormal(input) : handleInsert(input);
+  if (mode === modes.cmdline) await handleCmd(input);
+  else if (mode === modes.normal) await handleNormal(input);
+  else handleInsert(input);
 };
