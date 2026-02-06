@@ -10,7 +10,7 @@ const edit = async (file) => {
   await writer.write(encoder.encode(content));
 };
 
-Deno.stdin.setRaw(true);
+Deno.stdin.setRaw(true, { cbreak: true });
 
 const modes = { normal: "NORMAL", insert: "INSERT", cmdline: ":" };
 let mode = modes.normal;
@@ -18,19 +18,28 @@ let mode = modes.normal;
 const buffer = { lines: [""] };
 const cursorPos = { row: 0, col: 0 };
 
+// const write = async (bytes) => await Deno.stdout.write(bytes);
 const write = async (str) => await Deno.stdout.write(encoder.encode(str));
 
 export const clearScreen = async () => await write("\x1b[2J\x1b[H");
 
 const moveCursor = async (row, col) => await write(`\x1b[${row};${col}H`);
 
-const render = async () => {
+export const render = async () => {
   await clearScreen();
+
+  // buffer.lines.map(async (lineBytes) => {
+  //   console.log(lineBytes);
+
+  //   await write(lineBytes);
+  // });
 
   await write(buffer.lines.join("\n") + "\n");
   await write(`-- ${mode} --\x1b[0m`);
 
   await moveCursor(cursorPos.row + 1, cursorPos.col + 1);
+
+  // await write(buffer);
 };
 
 const handleNormal = async (key) => {
@@ -121,29 +130,57 @@ const handleInsert = (key) => {
   insertChar(key);
 };
 
-
 const handleCmd = async (key) => {
   if (key === "\x1b") {
     mode = modes.normal;
     return;
   }
-  
+
   // keys.push(key);
-  
+
   // console.log(buffer);
-  
+
   // cursorPos.row = buffer.lines.length;
   // cursorPos.col = 4;
-  
+
   // await moveCursor(cursorPos.row, cursorPos.col);
   // await render();
 };
 
+const splitBuf = (buf) => {
+  const chunks = [];
+  let index = 0;
+  let n = buf.indexOf(10, index);
+
+  while (n !== -1) {
+    const chunk = buf.subarray(index, n);
+    index += n + 1;
+    chunks.push(chunk);
+    n = buf.indexOf(10, index);
+  }
+
+  const lastNewlineIndex = buf.lastIndexOf(10);
+  chunks.push(buf.subarray(lastNewlineIndex + 1));
+
+  return chunks;
+};
+
 export const editor = async (running) => {
   await render();
-  // const keys = [];
 
-  const buf = new Uint8Array(8);
+  // for await (const chunk of file.readable) {
+  //   // console.log(splitBuf(chunk));
+
+  //   // const buff = splitBuf(chunk).join(",10,");
+
+  //   // console.log(buff);
+
+  //   // buff.map(async (line) => await Deno.stdout.write(line));
+
+  //   await Deno.stdout.write(chunk);
+  // }
+
+  const buf = new Uint8Array(1024);
   const n = await Deno.stdin.read(buf);
   if (n === null) return;
 
@@ -157,4 +194,13 @@ export const editor = async (running) => {
   if (mode === modes.cmdline) await handleCmd(input);
   else if (mode === modes.normal) await handleNormal(input);
   else handleInsert(input);
+};
+
+export const setBuffer = async (file) => {
+  for await (const chunk of file.readable) {
+    buffer.lines = splitBuf(chunk);
+    // console.log(buffer);
+
+    // await Deno.stdout.write(chunk);
+  }
 };
