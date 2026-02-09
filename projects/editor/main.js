@@ -1,4 +1,5 @@
-import { Editor, Terminal } from "./src/editor.js";
+import { Editor } from "./src/editor.js";
+import { Terminal } from "./src/terminal.js";
 
 const main = async (fileName) => {
   const prefix = "./samples/";

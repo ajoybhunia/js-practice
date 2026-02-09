@@ -1,3 +1,7 @@
+import { Terminal } from "./terminal.js";
+import { Cursor } from "./cursor.js";
+import { TextBuffer } from "./text_buffer.js";
+
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
@@ -8,130 +12,11 @@ const BACKSPACE = 0x7f;
 const CR = 0x0d;
 const NEW_LINE = 0x0a;
 
-const CLEAR = "\x1b[2J\x1b[H";
-
 const MODE_NORMAL = 0;
 const MODE_INSERT = 1;
 const MODE_CLI = 2;
 
 const MODES = ["-- NORMAL --", "-- INSERT --", "-- COMMAND LINE --"];
-
-class TextBuffer {
-  constructor(buffer) {
-    this.bytes = buffer;
-  }
-
-  insert(pos, byte) {
-    const newBuffer = new Uint8Array(this.bytes.length + 1);
-    newBuffer.set(this.bytes.subarray(0, pos));
-    newBuffer[pos] = byte;
-    newBuffer.set(this.bytes.subarray(pos), pos + 1);
-    this.bytes = newBuffer;
-
-    return pos + 1;
-  }
-
-  delete(pos) {
-    if (pos === 0) return pos;
-
-    const newBuffer = new Uint8Array(this.bytes.length - 1);
-    newBuffer.set(this.bytes.subarray(0, pos - 1));
-    newBuffer.set(this.bytes.subarray(pos), pos - 1);
-    this.bytes = newBuffer;
-
-    return pos - 1;
-  }
-
-  get length() {
-    return this.bytes.length;
-  }
-}
-
-class Cursor {
-  constructor() {
-    this.pos = 0;
-  }
-
-  lineStart(buffer) {
-    let p = this.pos;
-    while (p > 0 && buffer[p - 1] !== NEW_LINE) p--;
-    return p;
-  }
-
-  lineEnd(buffer) {
-    let p = this.pos;
-    while (p < buffer.length && buffer[p] !== NEW_LINE) p++;
-    return p;
-  }
-
-  column(buffer) {
-    return this.pos - this.lineStart(buffer);
-  }
-
-  moveLeft(buffer) {
-    if (this.pos > 0 && buffer[this.pos - 1] !== NEW_LINE) {
-      this.pos--;
-    }
-  }
-
-  moveRight(buffer) {
-    if (this.pos < buffer.length && buffer[this.pos] !== NEW_LINE) {
-      this.pos++;
-    }
-  }
-
-  moveDown(buffer) {
-    const col = this.column(buffer);
-    const end = this.lineEnd(buffer);
-
-    if (end >= buffer.length) return;
-
-    const nextStart = end + 1;
-    let nextEnd = nextStart;
-
-    while (nextEnd < buffer.length && buffer[nextEnd] !== NEW_LINE) {
-      nextEnd++;
-    }
-
-    this.pos = Math.min(nextStart + col, nextEnd);
-  }
-
-  moveUp(buffer) {
-    const col = this.column(buffer);
-    const start = this.lineStart(buffer);
-
-    if (start === 0) return;
-
-    const prevEnd = start - 1;
-    let prevStart = prevEnd;
-
-    while (prevStart > 0 && buffer[prevStart - 1] !== NEW_LINE) {
-      prevStart--;
-    }
-
-    this.pos = prevStart + Math.min(col, prevEnd - prevStart);
-  }
-}
-
-export class Terminal {
-  static async write(bytes) {
-    await Deno.stdout.write(bytes);
-  }
-
-  static async clear() {
-    await Deno.stdout.write(encoder.encode(CLEAR));
-  }
-
-  static async placeCursor(row, col) {
-    await this.write(encoder.encode(`\x1b[${row};${col}H`));
-  }
-
-  static async readKey() {
-    const buffer = new Uint8Array(1);
-    const n = await Deno.stdin.read(buffer);
-    return n ? buffer[0] : null;
-  }
-}
 
 export class Editor {
   constructor(bytes) {
