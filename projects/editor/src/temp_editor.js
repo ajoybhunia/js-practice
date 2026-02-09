@@ -17,6 +17,9 @@ const insertChar = (buffer, char) => {
   return concat([buffer, char]);
 };
 
+const deleteChar = (buffer, pos) => {
+};
+
 export const launchEdior = async (buffer) => {
   await render(buffer);
   let curr = buffer;
