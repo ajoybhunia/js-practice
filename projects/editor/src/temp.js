@@ -210,11 +210,12 @@ export class Editor {
     const buff = new Uint8Array(128);
     buff.set([58, key]);
 
+    let i = 2;
+
     const filtered = buff.slice(0, i + 1);
     await Terminal.clear();
     await Terminal.write(filtered);
-
-    let i = 2;
+    await this.drawStatus();
 
     while (true) {
       const key = await Terminal.readKey();
@@ -223,6 +224,7 @@ export class Editor {
       const filtered = buff.slice(0, i);
       await Terminal.clear();
       await Terminal.write(filtered);
+      await this.drawStatus();
 
       if (key === 0x1b) {
         this.mode = MODE_NORMAL;
