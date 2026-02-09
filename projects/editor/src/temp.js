@@ -3,7 +3,7 @@
 Deno.stdin.setRaw(true);
 const encoder = new TextEncoder();
 
-const CTRL_C = 0x03;
+// const CTRL_C = 0x03;
 const ESC = 0x1b;
 const BACKSPACE = 0x7f;
 const CR = 0x0d;
@@ -15,7 +15,7 @@ const MODE_NORMAL = 0;
 const MODE_INSERT = 1;
 const MODE_CLI = 2;
 
-const MODES = ["-- NORMAL --", "-- INSERT --", "-- : --"];
+const MODES = ["-- NORMAL --", "-- INSERT --", "-- COMMAND LINE --"];
 
 class TextBuffer {
   constructor(buffer) {
@@ -206,26 +206,43 @@ export class Editor {
   }
 
   async handleCLI() {
-    const buff = new Uint8Array([58, 0, 0, 0, 0]);
+    const buff = new Uint8Array(128);
+    buff.set([58]);
     let i = 1;
-    while (i < 5) {
-      const key = [await Terminal.readKey()];
-      buff.set(key, i);
+
+    while (true) {
+      const key = await Terminal.readKey();
+      buff.set([key], i);
       await Terminal.write(buff.filter((x) => x));
-      // if (new TextDecoder().decode(buf.subarray(0, n)) === "qa!") {
-      //   console.log("HELLO WORLD");
-      //   break;
-      // }
       i++;
-      if (key === [13]) {
-        break;
+
+      if (key === 13) {
+        const decoder = new TextDecoder();
+
+        console.log("here");
+        if (decoder.decode(buff.filter((x) => x)) === ":qa!\r") {
+          return true;
+        }
+
+        return;
       }
     }
-    const decoder = new TextDecoder();
 
-    if (decoder.decode(buff) === ":qa!\r") {
-      return true;
-    }
+    // while (i < 5) {
+    //   const key = [await Terminal.readKey()];
+    //   buff.set(key, i);
+    //   await Terminal.write(buff.filter((x) => x));
+    //   i++;
+    //   if (key === [13]) {
+    //     break;
+    //   }
+    // }
+
+    // const decoder = new TextDecoder();
+
+    // if (decoder.decode(buff) === ":qa!\r") {
+    //   return true;
+    // }
   }
 
   computeCursor() {
