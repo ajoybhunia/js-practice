@@ -1,206 +1,273 @@
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
-const edit = async (file) => {
-  const content = prompt("WRITE HERE\n");
+Deno.stdin.setRaw(true);
 
-  // await file.read()
+const ESC = 0x1b;
+const BACKSPACE = 0x7f;
+const CR = 0x0d;
+const NEW_LINE = 0x0a;
 
-  const writer = file.writable.getWriter();
-  await writer.write(encoder.encode(content));
-};
+const CLEAR = "\x1b[2J\x1b[H";
 
-Deno.stdin.setRaw(true, { cbreak: true });
+const MODE_NORMAL = 0;
+const MODE_INSERT = 1;
+const MODE_CLI = 2;
 
-const modes = { normal: "NORMAL", insert: "INSERT", cmdline: ":" };
-let mode = modes.normal;
+const MODES = ["-- NORMAL --", "-- INSERT --", "-- COMMAND LINE --"];
 
-const buffer = { lines: [""] };
-const cursorPos = { row: 0, col: 0 };
-
-// const write = async (bytes) => await Deno.stdout.write(bytes);
-const write = async (str) => await Deno.stdout.write(encoder.encode(str));
-
-export const clearScreen = async () => await write("\x1b[2J\x1b[H");
-
-const moveCursor = async (row, col) => await write(`\x1b[${row};${col}H`);
-
-export const render = async () => {
-  await clearScreen();
-
-  // buffer.lines.map(async (lineBytes) => {
-  //   console.log(lineBytes);
-
-  //   await write(lineBytes);
-  // });
-
-  await write(buffer.lines.join("\n") + "\n");
-  await write(`-- ${mode} --\x1b[0m`);
-
-  await moveCursor(cursorPos.row + 1, cursorPos.col + 1);
-
-  // await write(buffer);
-};
-
-const handleNormal = async (key) => {
-  if (key === "i") {
-    mode = modes.insert;
-    return;
+class TextBuffer {
+  constructor(buffer) {
+    this.bytes = buffer;
   }
 
-  if (key === ":") {
-    mode = modes.cmdline;
-    cursorPos.row = buffer.lines.length;
-    cursorPos.col = 4;
+  insert(pos, byte) {
+    const newBuffer = new Uint8Array(this.bytes.length + 1);
+    newBuffer.set(this.bytes.subarray(0, pos));
+    newBuffer[pos] = byte;
+    newBuffer.set(this.bytes.subarray(pos), pos + 1);
+    this.bytes = newBuffer;
 
-    await moveCursor(cursorPos.row, cursorPos.col);
-    await render();
-    return;
+    return pos + 1;
   }
 
-  if (key === "h") {
-    cursorPos.col = Math.max(0, cursorPos.col - 1);
-    return;
+  delete(pos) {
+    if (pos === 0) return pos;
+
+    const newBuffer = new Uint8Array(this.bytes.length - 1);
+    newBuffer.set(this.bytes.subarray(0, pos - 1));
+    newBuffer.set(this.bytes.subarray(pos), pos - 1);
+    this.bytes = newBuffer;
+
+    return pos - 1;
   }
 
-  if (key === "l") {
-    cursorPos.col = Math.min(
-      buffer.lines[cursorPos.row].length,
-      cursorPos.col + 1,
+  get length() {
+    return this.bytes.length;
+  }
+}
+
+class Cursor {
+  constructor() {
+    this.pos = 0;
+  }
+
+  lineStart(buffer) {
+    let p = this.pos;
+    while (p > 0 && buffer[p - 1] !== NEW_LINE) p--;
+    return p;
+  }
+
+  lineEnd(buffer) {
+    let p = this.pos;
+    while (p < buffer.length && buffer[p] !== NEW_LINE) p++;
+    return p;
+  }
+
+  column(buffer) {
+    return this.pos - this.lineStart(buffer);
+  }
+
+  moveLeft(buffer) {
+    if (this.pos > 0 && buffer[this.pos - 1] !== NEW_LINE) {
+      this.pos--;
+    }
+  }
+
+  moveRight(buffer) {
+    if (this.pos < buffer.length && buffer[this.pos] !== NEW_LINE) {
+      this.pos++;
+    }
+  }
+
+  moveDown(buffer) {
+    const col = this.column(buffer);
+    const end = this.lineEnd(buffer);
+
+    if (end >= buffer.length) return;
+
+    const nextStart = end + 1;
+    let nextEnd = nextStart;
+
+    while (nextEnd < buffer.length && buffer[nextEnd] !== NEW_LINE) {
+      nextEnd++;
+    }
+
+    this.pos = Math.min(nextStart + col, nextEnd);
+  }
+
+  moveUp(buffer) {
+    const col = this.column(buffer);
+    const start = this.lineStart(buffer);
+
+    if (start === 0) return;
+
+    const prevEnd = start - 1;
+    let prevStart = prevEnd;
+
+    while (prevStart > 0 && buffer[prevStart - 1] !== NEW_LINE) {
+      prevStart--;
+    }
+
+    this.pos = prevStart + Math.min(col, prevEnd - prevStart);
+  }
+}
+
+class Terminal {
+  static async write(bytes) {
+    await Deno.stdout.write(bytes);
+  }
+
+  static async clear() {
+    await Deno.stdout.write(encoder.encode(CLEAR));
+  }
+
+  static async placeCursor(row, col) {
+    await this.write(encoder.encode(`\x1b[${row};${col}H`));
+  }
+
+  static async readKey() {
+    const buffer = new Uint8Array(1);
+    const n = await Deno.stdin.read(buffer);
+    return n ? buffer[0] : null;
+  }
+}
+
+export class Editor {
+  constructor(bytes) {
+    this.buffer = new TextBuffer(bytes);
+    this.cursor = new Cursor();
+    this.cursor.pos = this.buffer.length;
+    this.mode = MODE_NORMAL;
+  }
+
+  async run() {
+    while (true) {
+      await this.render(this.buffer.bytes, this.cursor.pos);
+      const key = await Terminal.readKey();
+
+      const info = await this.handleKey(key);
+      if (info && info.shouldReturn) return info;
+    }
+  }
+
+  async handleKey(key) {
+    if (this.mode === MODE_NORMAL) {
+      this.handleNormal(key);
+    } else if (this.mode === MODE_CLI) {
+      return await this.handleCLI(key);
+    } else {
+      this.handleInsert(key);
+    }
+  }
+
+  handleNormal(key) {
+    switch (key) {
+      case 0x68: // h
+        this.cursor.moveLeft(this.buffer.bytes);
+        break;
+      case 0x6c: // l
+        this.cursor.moveRight(this.buffer.bytes);
+        break;
+      case 0x6a: // j
+        this.cursor.moveDown(this.buffer.bytes);
+        break;
+      case 0x6b: // k
+        this.cursor.moveUp(this.buffer.bytes);
+        break;
+      case 0x69: // i
+        this.mode = MODE_INSERT;
+        break;
+      case 0x3A: // :
+        this.mode = MODE_CLI;
+        break;
+    }
+  }
+
+  handleInsert(key) {
+    if (key === ESC) {
+      this.mode = MODE_NORMAL;
+      return;
+    }
+
+    if (key === BACKSPACE) {
+      this.cursor.pos = this.buffer.delete(this.cursor.pos);
+      return;
+    }
+
+    if (key === CR) {
+      this.cursor.pos = this.buffer.insert(this.cursor.pos, NEW_LINE);
+      return;
+    }
+
+    this.cursor.pos = this.buffer.insert(this.cursor.pos, key);
+  }
+
+  async handleCLI(key) {
+    const buff = new Uint8Array(2);
+    buff.set([58, key]);
+
+    const cmdBuff = new TextBuffer(buff);
+    let pos = cmdBuff.length;
+
+    this.render(cmdBuff.bytes, pos);
+
+    while (true) {
+      const key = await Terminal.readKey();
+      pos = cmdBuff.insert(pos, key);
+
+      if (key === 0x1b) {
+        this.mode = MODE_NORMAL;
+        return;
+      }
+
+      if (key === 0x0d) {
+        if (decoder.decode(cmdBuff.bytes) === ":qa!\r") {
+          return { shouldReturn: true, shouldWrite: false };
+        }
+
+        if (decoder.decode(cmdBuff.bytes) === ":wq!\r") {
+          return {
+            shouldReturn: true,
+            shouldWrite: true,
+            data: this.buffer.bytes,
+          };
+        }
+
+        this.mode = MODE_NORMAL;
+        return;
+      }
+
+      this.render(cmdBuff.bytes, pos);
+    }
+  }
+
+  computeCursor(bytes, pos) {
+    let row = 1, col = 1;
+
+    for (let i = 0; i < pos; i++) {
+      bytes[i] === NEW_LINE ? (row++, col = 1) : col++;
+    }
+
+    return { row, col };
+  }
+
+  async placeCursor(bytes = this.buffer.bytes, pos = this.cursor.pos) {
+    const { row, col } = this.computeCursor(bytes, pos);
+    await Terminal.placeCursor(row, col);
+  }
+
+  async drawStatus() {
+    const status = MODES[this.mode];
+    await Terminal.write(
+      new Uint8Array([NEW_LINE, NEW_LINE, ...encoder.encode(status)]),
     );
-
-    return;
   }
 
-  if (key === "j") {
-    cursorPos.row = Math.min(cursorPos.row + 1, buffer.lines.length - 1);
-    cursorPos.col = Math.min(cursorPos.col, buffer.lines[cursorPos.row].length);
-
-    return;
+  async render(bytes, pos) {
+    await Terminal.clear();
+    await Terminal.write(bytes);
+    await this.drawStatus();
+    await this.placeCursor(bytes, pos);
   }
-
-  if (key === "k") {
-    cursorPos.row = Math.max(cursorPos.row - 1, 0);
-    cursorPos.col = Math.min(cursorPos.col, buffer.lines[cursorPos.row].length);
-
-    return;
-  }
-};
-
-const insertChar = (char) => {
-  const line = buffer.lines[cursorPos.row];
-  buffer.lines[cursorPos.row] = line.slice(0, cursorPos.col) + char +
-    line.slice(cursorPos.col);
-  cursorPos.col++;
-};
-
-const deleteChar = () => {
-  if (cursorPos.col === 0) return;
-
-  const line = buffer.lines[cursorPos.row];
-  buffer.lines[cursorPos.row] = line.slice(0, cursorPos.col - 1) +
-    line.slice(cursorPos.col);
-  cursorPos.col--;
-};
-
-const handleInsert = (key) => {
-  if (key === "\x1b") {
-    mode = modes.normal;
-    return;
-  }
-
-  if (key === "\x7f") {
-    deleteChar();
-    return;
-  }
-
-  if (key === "\r") {
-    const line = buffer.lines[cursorPos.row];
-    const before = line.slice(0, cursorPos.col);
-    const after = line.slice(cursorPos.col);
-
-    buffer.lines[cursorPos.row] = before;
-    buffer.lines.splice(cursorPos.row + 1, 0, after);
-
-    cursorPos.row++;
-    cursorPos.col = 0;
-    return;
-  }
-
-  insertChar(key);
-};
-
-const handleCmd = async (key) => {
-  if (key === "\x1b") {
-    mode = modes.normal;
-    return;
-  }
-
-  // keys.push(key);
-
-  // console.log(buffer);
-
-  // cursorPos.row = buffer.lines.length;
-  // cursorPos.col = 4;
-
-  // await moveCursor(cursorPos.row, cursorPos.col);
-  // await render();
-};
-
-const splitBuf = (buf) => {
-  const chunks = [];
-  let index = 0;
-  let n = buf.indexOf(10, index);
-
-  while (n !== -1) {
-    const chunk = buf.subarray(index, n);
-    index += n + 1;
-    chunks.push(chunk);
-    n = buf.indexOf(10, index);
-  }
-
-  const lastNewlineIndex = buf.lastIndexOf(10);
-  chunks.push(buf.subarray(lastNewlineIndex + 1));
-
-  return chunks;
-};
-
-export const editor = async (running) => {
-  await render();
-
-  // for await (const chunk of file.readable) {
-  //   // console.log(splitBuf(chunk));
-
-  //   // const buff = splitBuf(chunk).join(",10,");
-
-  //   // console.log(buff);
-
-  //   // buff.map(async (line) => await Deno.stdout.write(line));
-
-  //   await Deno.stdout.write(chunk);
-  // }
-
-  const buf = new Uint8Array(1024);
-  const n = await Deno.stdin.read(buf);
-  if (n === null) return;
-
-  const input = decoder.decode(buf.subarray(0, n));
-
-  if (input === "\x03") {
-    running.isRunning = false;
-    return;
-  }
-
-  if (mode === modes.cmdline) await handleCmd(input);
-  else if (mode === modes.normal) await handleNormal(input);
-  else handleInsert(input);
-};
-
-export const setBuffer = async (file) => {
-  for await (const chunk of file.readable) {
-    buffer.lines = splitBuf(chunk);
-    // console.log(buffer);
-
-    // await Deno.stdout.write(chunk);
-  }
-};
+}
