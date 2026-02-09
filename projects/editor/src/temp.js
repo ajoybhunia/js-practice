@@ -1,9 +1,10 @@
-// import { equal } from "@std/assert";
+let asd = 0;
+
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
 
 Deno.stdin.setRaw(true);
-const encoder = new TextEncoder();
 
-// const CTRL_C = 0x03;
 const ESC = 0x1b;
 const BACKSPACE = 0x7f;
 const CR = 0x0d;
@@ -147,7 +148,7 @@ export class Editor {
     while (true) {
       await this.render();
       const key = await Terminal.readKey();
-      // if (key === CTRL_C) break;
+
       const shouldReturn = await this.handleKey(key);
       if (shouldReturn) break;
     }
@@ -157,7 +158,7 @@ export class Editor {
     if (this.mode === MODE_NORMAL) {
       this.handleNormal(key);
     } else if (this.mode === MODE_CLI) {
-      return await this.handleCLI();
+      return await this.handleCLI(key);
     } else {
       this.handleInsert(key);
     }
@@ -205,44 +206,38 @@ export class Editor {
     this.cursor.pos = this.buffer.insert(this.cursor.pos, key);
   }
 
-  async handleCLI() {
+  async handleCLI(key) {
     const buff = new Uint8Array(128);
-    buff.set([58]);
-    let i = 1;
+    buff.set([58, key]);
+    let i = 2;
+    const filtered = buff.slice(0, i + 1);
+
+    await Terminal.clear();
+    await Terminal.write(filtered);
 
     while (true) {
       const key = await Terminal.readKey();
       buff.set([key], i);
-      await Terminal.write(buff.filter((x) => x));
+
+      const filtered = buff.slice(0, i + 1);
+      await Terminal.clear();
+      await Terminal.write(filtered);
+
       i++;
 
-      if (key === 13) {
-        const decoder = new TextDecoder();
+      if (key === 0x1b) {
+        this.mode = MODE_NORMAL;
+        return;
+      }
 
-        console.log("here");
-        if (decoder.decode(buff.filter((x) => x)) === ":qa!\r") {
+      if (key === 0x0d) {
+        if (decoder.decode(filtered) === ":qa!\r") {
           return true;
         }
 
         return;
       }
     }
-
-    // while (i < 5) {
-    //   const key = [await Terminal.readKey()];
-    //   buff.set(key, i);
-    //   await Terminal.write(buff.filter((x) => x));
-    //   i++;
-    //   if (key === [13]) {
-    //     break;
-    //   }
-    // }
-
-    // const decoder = new TextDecoder();
-
-    // if (decoder.decode(buff) === ":qa!\r") {
-    //   return true;
-    // }
   }
 
   computeCursor() {
@@ -261,10 +256,7 @@ export class Editor {
   }
 
   async drawStatus() {
-    // const status = this.mode === MODE_INSERT ? "-- INSERT --" : "-- NORMAL --";
-
     const status = MODES[this.mode];
-
     await Terminal.write(new Uint8Array([NEW_LINE, ...encoder.encode(status)]));
   }
 
