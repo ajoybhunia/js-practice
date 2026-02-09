@@ -1,3 +1,5 @@
+// import { equal } from "@std/assert";
+
 Deno.stdin.setRaw(true);
 const encoder = new TextEncoder();
 
@@ -11,6 +13,9 @@ const CLEAR = "\x1b[2J\x1b[H";
 
 const MODE_NORMAL = 0;
 const MODE_INSERT = 1;
+const MODE_CLI = 2;
+
+const MODES = ["-- NORMAL --", "-- INSERT --", "-- : --"];
 
 class TextBuffer {
   constructor(buffer) {
@@ -142,14 +147,17 @@ export class Editor {
     while (true) {
       await this.render();
       const key = await Terminal.readKey();
-      if (key === CTRL_C) break;
-      this.handleKey(key);
+      // if (key === CTRL_C) break;
+      const shouldReturn = await this.handleKey(key);
+      if (shouldReturn) break;
     }
   }
 
-  handleKey(key) {
+  async handleKey(key) {
     if (this.mode === MODE_NORMAL) {
       this.handleNormal(key);
+    } else if (this.mode === MODE_CLI) {
+      return await this.handleCLI();
     } else {
       this.handleInsert(key);
     }
@@ -171,6 +179,9 @@ export class Editor {
         break;
       case 0x69: // i
         this.mode = MODE_INSERT;
+        break;
+      case 0x3A: // :
+        this.mode = MODE_CLI;
         break;
     }
   }
@@ -194,6 +205,29 @@ export class Editor {
     this.cursor.pos = this.buffer.insert(this.cursor.pos, key);
   }
 
+  async handleCLI() {
+    const buff = new Uint8Array([58, 0, 0, 0, 0]);
+    let i = 1;
+    while (i < 5) {
+      const key = [await Terminal.readKey()];
+      buff.set(key, i);
+      await Terminal.write(buff.filter((x) => x));
+      // if (new TextDecoder().decode(buf.subarray(0, n)) === "qa!") {
+      //   console.log("HELLO WORLD");
+      //   break;
+      // }
+      i++;
+      if (key === [13]) {
+        break;
+      }
+    }
+    const decoder = new TextDecoder();
+
+    if (decoder.decode(buff) === ":qa!\r") {
+      return true;
+    }
+  }
+
   computeCursor() {
     let row = 1, col = 1;
 
@@ -210,7 +244,9 @@ export class Editor {
   }
 
   async drawStatus() {
-    const status = this.mode === MODE_INSERT ? "-- INSERT --" : "-- NORMAL --";
+    // const status = this.mode === MODE_INSERT ? "-- INSERT --" : "-- NORMAL --";
+
+    const status = MODES[this.mode];
 
     await Terminal.write(new Uint8Array([NEW_LINE, ...encoder.encode(status)]));
   }
