@@ -37,12 +37,13 @@ export class Editor {
   }
 
   async handleKey(key) {
-    if (this.mode === MODES.MODE_NORMAL) {
-      this.handleNormal(key);
-    } else if (this.mode === MODES.MODE_CLI) {
-      return await this.handleCLI(key);
-    } else {
-      this.handleInsert(key);
+    switch (this.mode) {
+      case MODES.MODE_NORMAL:
+        return this.handleNormal(key);
+      case MODES.MODE_CLI:
+        return await this.handleCLI(key);
+      default:
+        return this.handleInsert(key);
     }
   }
 
@@ -70,22 +71,20 @@ export class Editor {
   }
 
   handleInsert(key) {
-    if (key === ESC) {
-      this.mode = MODES.MODE_NORMAL;
-      return;
+    switch (key) {
+      case ESC:
+        this.mode = MODES.MODE_NORMAL;
+        break;
+      case BACKSPACE:
+        this.cursor.pos = this.buffer.delete(this.cursor.pos);
+        break;
+      case CR:
+        this.cursor.pos = this.buffer.insert(this.cursor.pos, NEW_LINE);
+        break;
+      default:
+        this.cursor.pos = this.buffer.insert(this.cursor.pos, key);
+        break;
     }
-
-    if (key === BACKSPACE) {
-      this.cursor.pos = this.buffer.delete(this.cursor.pos);
-      return;
-    }
-
-    if (key === CR) {
-      this.cursor.pos = this.buffer.insert(this.cursor.pos, NEW_LINE);
-      return;
-    }
-
-    this.cursor.pos = this.buffer.insert(this.cursor.pos, key);
   }
 
   async handleCLI(key) {
