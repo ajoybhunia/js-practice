@@ -112,7 +112,6 @@ class Cursor {
     }
 
     this.pos = prevStart + Math.min(col, prevEnd - prevStart);
-    // await Terminal.write(encoder.encode("\x1b[A"));
   }
 }
 
@@ -146,7 +145,7 @@ export class Editor {
 
   async run() {
     while (true) {
-      await this.render();
+      await this.render(this.buffer.bytes, this.cursor.pos);
       const key = await Terminal.readKey();
 
       const shouldReturn = await this.handleKey(key);
@@ -207,24 +206,17 @@ export class Editor {
   }
 
   async handleCLI(key) {
-    const buff = new Uint8Array(128);
+    const buff = new Uint8Array(2);
     buff.set([58, key]);
 
-    let i = 2;
+    const cmdBuff = new TextBuffer(buff);
+    let pos = cmdBuff.length;
 
-    const filtered = buff.slice(0, i + 1);
-    await Terminal.clear();
-    await Terminal.write(filtered);
-    await this.drawStatus();
+    this.render(cmdBuff.bytes, pos);
 
     while (true) {
       const key = await Terminal.readKey();
-      buff.set([key], i++);
-
-      const filtered = buff.slice(0, i);
-      await Terminal.clear();
-      await Terminal.write(filtered);
-      await this.drawStatus();
+      pos = cmdBuff.insert(pos, key);
 
       if (key === 0x1b) {
         this.mode = MODE_NORMAL;
@@ -232,39 +224,44 @@ export class Editor {
       }
 
       if (key === 0x0d) {
-        if (decoder.decode(filtered) === ":qa!\r") {
+        if (decoder.decode(cmdBuff.bytes) === ":qa!\r") {
           return true;
         }
 
+        this.mode = MODE_NORMAL;
         return;
       }
+
+      this.render(cmdBuff.bytes, pos);
     }
   }
 
-  computeCursor() {
+  computeCursor(bytes, pos) {
     let row = 1, col = 1;
 
-    for (let i = 0; i < this.cursor.pos; i++) {
-      this.buffer.bytes[i] === NEW_LINE ? (row++, col = 1) : col++;
+    for (let i = 0; i < pos; i++) {
+      bytes[i] === NEW_LINE ? (row++, col = 1) : col++;
     }
 
     return { row, col };
   }
 
-  async placeCursor() {
-    const { row, col } = this.computeCursor();
+  async placeCursor(bytes = this.buffer.bytes, pos = this.cursor.pos) {
+    const { row, col } = this.computeCursor(bytes, pos);
     await Terminal.placeCursor(row, col);
   }
 
   async drawStatus() {
     const status = MODES[this.mode];
-    await Terminal.write(new Uint8Array([NEW_LINE, ...encoder.encode(status)]));
+    await Terminal.write(
+      new Uint8Array([NEW_LINE, NEW_LINE, ...encoder.encode(status)]),
+    );
   }
 
-  async render() {
+  async render(bytes, pos) {
     await Terminal.clear();
-    await Terminal.write(this.buffer.bytes);
+    await Terminal.write(bytes);
     await this.drawStatus();
-    await this.placeCursor();
+    await this.placeCursor(bytes, pos);
   }
 }
