@@ -101,12 +101,12 @@ export class Editor {
       const key = await Terminal.readKey();
       pos = cmdBuff.insert(pos, key);
 
-      if (key === 0x1b) {
+      if (key === ESC) {
         this.mode = MODES.MODE_NORMAL;
         return;
       }
 
-      if (key === 0x0d) {
+      if (key === CR) {
         if (decoder.decode(cmdBuff.bytes) === ":qa!\r") {
           return { shouldReturn: true, shouldWrite: false };
         }
