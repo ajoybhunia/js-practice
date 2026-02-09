@@ -209,21 +209,20 @@ export class Editor {
   async handleCLI(key) {
     const buff = new Uint8Array(128);
     buff.set([58, key]);
-    let i = 2;
-    const filtered = buff.slice(0, i + 1);
 
+    const filtered = buff.slice(0, i + 1);
     await Terminal.clear();
     await Terminal.write(filtered);
 
+    let i = 2;
+
     while (true) {
       const key = await Terminal.readKey();
-      buff.set([key], i);
+      buff.set([key], i++);
 
-      const filtered = buff.slice(0, i + 1);
+      const filtered = buff.slice(0, i);
       await Terminal.clear();
       await Terminal.write(filtered);
-
-      i++;
 
       if (key === 0x1b) {
         this.mode = MODE_NORMAL;
