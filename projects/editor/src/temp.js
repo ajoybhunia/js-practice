@@ -14,15 +14,15 @@ const MODE_INSERT = 1;
 
 class TextBuffer {
   constructor(buffer) {
-    this.buffer = buffer;
+    this.bytes = buffer;
   }
 
   insert(pos, byte) {
-    const newBuffer = new Uint8Array(this.buffer.length + 1);
-    newBuffer.set(this.buffer.subarray(0, pos));
+    const newBuffer = new Uint8Array(this.bytes.length + 1);
+    newBuffer.set(this.bytes.subarray(0, pos));
     newBuffer[pos] = byte;
-    newBuffer.set(this.buffer.subarray(pos), pos + 1);
-    this.buffer = newBuffer;
+    newBuffer.set(this.bytes.subarray(pos), pos + 1);
+    this.bytes = newBuffer;
 
     return pos + 1;
   }
@@ -30,16 +30,16 @@ class TextBuffer {
   delete(pos) {
     if (pos === 0) return pos;
 
-    const newBuffer = new Uint8Array(this.buffer.length - 1);
-    newBuffer.set(this.buffer.subarray(0, pos - 1));
-    newBuffer.set(this.buffer.subarray(pos), pos - 1);
-    this.buffer = newBuffer;
+    const newBuffer = new Uint8Array(this.bytes.length - 1);
+    newBuffer.set(this.bytes.subarray(0, pos - 1));
+    newBuffer.set(this.bytes.subarray(pos), pos - 1);
+    this.bytes = newBuffer;
 
     return pos - 1;
   }
 
   get length() {
-    return this.buffer.length;
+    return this.bytes.length;
   }
 }
 
@@ -79,10 +79,12 @@ class Cursor {
   moveDown(buffer) {
     const col = this.column(buffer);
     const end = this.lineEnd(buffer);
+
     if (end >= buffer.length) return;
 
     const nextStart = end + 1;
     let nextEnd = nextStart;
+
     while (nextEnd < buffer.length && buffer[nextEnd] !== NEW_LINE) {
       nextEnd++;
     }
@@ -93,16 +95,17 @@ class Cursor {
   moveUp(buffer) {
     const col = this.column(buffer);
     const start = this.lineStart(buffer);
+
     if (start === 0) return;
 
     const prevEnd = start - 1;
     let prevStart = prevEnd;
+
     while (prevStart > 0 && buffer[prevStart - 1] !== NEW_LINE) {
       prevStart--;
     }
 
-    this.pos = prevStart + Math.min(col, prevEnd - prevStart + 1);
-
+    this.pos = prevStart + Math.min(col, prevEnd - prevStart);
     // await Terminal.write(encoder.encode("\x1b[A"));
   }
 }
@@ -155,16 +158,16 @@ export class Editor {
   handleNormal(key) {
     switch (key) {
       case 0x68: // h
-        this.cursor.moveLeft(this.buffer.buffer);
+        this.cursor.moveLeft(this.buffer.bytes);
         break;
       case 0x6c: // l
-        this.cursor.moveRight(this.buffer.buffer);
+        this.cursor.moveRight(this.buffer.bytes);
         break;
       case 0x6a: // j
-        this.cursor.moveDown(this.buffer.buffer);
+        this.cursor.moveDown(this.buffer.bytes);
         break;
       case 0x6b: // k
-        this.cursor.moveUp(this.buffer.buffer);
+        this.cursor.moveUp(this.buffer.bytes);
         break;
       case 0x69: // i
         this.mode = MODE_INSERT;
@@ -195,7 +198,7 @@ export class Editor {
     let row = 1, col = 1;
 
     for (let i = 0; i < this.cursor.pos; i++) {
-      this.buffer.buffer[i] === NEW_LINE ? (row++, col = 1) : col++;
+      this.buffer.bytes[i] === NEW_LINE ? (row++, col = 1) : col++;
     }
 
     return { row, col };
@@ -214,7 +217,7 @@ export class Editor {
 
   async render() {
     await Terminal.clear();
-    await Terminal.write(this.buffer.buffer);
+    await Terminal.write(this.buffer.bytes);
     await this.drawStatus();
     await this.placeCursor();
   }
