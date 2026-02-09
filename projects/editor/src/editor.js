@@ -12,18 +12,18 @@ const BACKSPACE = 0x7f;
 const CR = 0x0d;
 const NEW_LINE = 0x0a;
 
-const MODE_NORMAL = 0;
-const MODE_INSERT = 1;
-const MODE_CLI = 2;
-
-const MODES = ["-- NORMAL --", "-- INSERT --", "-- COMMAND LINE --"];
+const MODES = {
+  MODE_NORMAL: "-- NORMAL --",
+  MODE_INSERT: "-- INSERT --",
+  MODE_CLI: "-- COMMAND LINE --",
+};
 
 export class Editor {
   constructor(bytes) {
     this.buffer = new TextBuffer(bytes);
     this.cursor = new Cursor();
     this.cursor.pos = this.buffer.length;
-    this.mode = MODE_NORMAL;
+    this.mode = MODES.MODE_NORMAL;
   }
 
   async run() {
@@ -37,9 +37,9 @@ export class Editor {
   }
 
   async handleKey(key) {
-    if (this.mode === MODE_NORMAL) {
+    if (this.mode === MODES.MODE_NORMAL) {
       this.handleNormal(key);
-    } else if (this.mode === MODE_CLI) {
+    } else if (this.mode === MODES.MODE_CLI) {
       return await this.handleCLI(key);
     } else {
       this.handleInsert(key);
@@ -61,17 +61,17 @@ export class Editor {
         this.cursor.moveUp(this.buffer.bytes);
         break;
       case 0x69: // i
-        this.mode = MODE_INSERT;
+        this.mode = MODES.MODE_INSERT;
         break;
       case 0x3A: // :
-        this.mode = MODE_CLI;
+        this.mode = MODES.MODE_CLI;
         break;
     }
   }
 
   handleInsert(key) {
     if (key === ESC) {
-      this.mode = MODE_NORMAL;
+      this.mode = MODES.MODE_NORMAL;
       return;
     }
 
@@ -102,7 +102,7 @@ export class Editor {
       pos = cmdBuff.insert(pos, key);
 
       if (key === 0x1b) {
-        this.mode = MODE_NORMAL;
+        this.mode = MODES.MODE_NORMAL;
         return;
       }
 
@@ -119,7 +119,7 @@ export class Editor {
           };
         }
 
-        this.mode = MODE_NORMAL;
+        this.mode = MODES.MODE_NORMAL;
         return;
       }
 
@@ -143,7 +143,7 @@ export class Editor {
   }
 
   async drawStatus() {
-    const status = MODES[this.mode];
+    const status = this.mode;
     await Terminal.write(
       new Uint8Array([NEW_LINE, NEW_LINE, ...encoder.encode(status)]),
     );
