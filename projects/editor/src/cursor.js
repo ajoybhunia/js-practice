@@ -22,15 +22,11 @@ export class Cursor {
   }
 
   moveLeft(buffer) {
-    if (this.pos > 0 && buffer[this.pos - 1] !== NEW_LINE) {
-      this.pos--;
-    }
+    if (this.pos > 0 && buffer[this.pos - 1] !== NEW_LINE) this.pos--;
   }
 
   moveRight(buffer) {
-    if (this.pos < buffer.length && buffer[this.pos] !== NEW_LINE) {
-      this.pos++;
-    }
+    if (this.pos < buffer.length && buffer[this.pos] !== NEW_LINE) this.pos++;
   }
 
   moveDown(buffer) {
@@ -42,9 +38,7 @@ export class Cursor {
     const nextStart = end + 1;
     let nextEnd = nextStart;
 
-    while (nextEnd < buffer.length && buffer[nextEnd] !== NEW_LINE) {
-      nextEnd++;
-    }
+    while (nextEnd < buffer.length && buffer[nextEnd] !== NEW_LINE) nextEnd++;
 
     this.pos = Math.min(nextStart + col, nextEnd);
   }
@@ -58,9 +52,7 @@ export class Cursor {
     const prevEnd = start - 1;
     let prevStart = prevEnd;
 
-    while (prevStart > 0 && buffer[prevStart - 1] !== NEW_LINE) {
-      prevStart--;
-    }
+    while (prevStart > 0 && buffer[prevStart - 1] !== NEW_LINE) prevStart--;
 
     this.pos = prevStart + Math.min(col, prevEnd - prevStart);
   }
