@@ -137,7 +137,7 @@ export class Editor {
     return { row, col };
   }
 
-  async placeCursor(bytes = this.buffer.bytes, pos = this.cursor.pos) {
+  async placeCursor(bytes, pos) {
     const { row, col } = this.computeCursor(bytes, pos);
     await Terminal.placeCursor(row, col);
   }
