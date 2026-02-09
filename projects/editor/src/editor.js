@@ -113,7 +113,7 @@ class Cursor {
   }
 }
 
-class Terminal {
+export class Terminal {
   static async write(bytes) {
     await Deno.stdout.write(bytes);
   }

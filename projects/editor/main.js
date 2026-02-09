@@ -1,4 +1,4 @@
-import { Editor } from "./src/editor.js";
+import { Editor, Terminal } from "./src/editor.js";
 
 const main = async (fileName) => {
   const prefix = "./samples/";
@@ -18,6 +18,7 @@ const main = async (fileName) => {
   const info = await editor.run();
 
   if (info.shouldWrite) await Deno.writeFile(filePath, info.data);
+  await Terminal.clear();
 };
 
 await main(Deno.args);
