@@ -1,13 +1,7 @@
+import { KEYS } from "./utils.js";
+
 const encoder = new TextEncoder();
 const CLEAR = "\x1b[2J\x1b[H";
-
-export const KEYS = {
-  UP: "UP",
-  DOWN: "DOWN",
-  LEFT: "LEFT",
-  RIGHT: "RIGHT",
-  ESC: 0x1b,
-};
 
 export class Terminal {
   static async write(bytes) {
@@ -28,15 +22,15 @@ export class Terminal {
 
     if (!n) return null;
 
-    if (buf[0] === 0x1b && buf[1] === 0x5b) {
+    if (buf[0] === KEYS.ESC && buf[1] === KEYS["["]) {
       switch (buf[2]) {
-        case 0x41:
+        case KEYS.A:
           return KEYS.UP;
-        case 0x42:
+        case KEYS.B:
           return KEYS.DOWN;
-        case 0x43:
+        case KEYS.C:
           return KEYS.RIGHT;
-        case 0x44:
+        case KEYS.D:
           return KEYS.LEFT;
       }
     }

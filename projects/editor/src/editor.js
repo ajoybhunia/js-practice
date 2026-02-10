@@ -1,22 +1,10 @@
-import { KEYS, Terminal } from "./terminal.js";
+import { Terminal } from "./terminal.js";
 import { Cursor } from "./cursor.js";
 import { TextBuffer } from "./text_buffer.js";
+import { KEYS, MODES } from "./utils.js";
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
-
-Deno.stdin.setRaw(true);
-
-const ESC = 0x1b;
-const BACKSPACE = 0x7f;
-const CR = 0x0d;
-const NEW_LINE = 0x0a;
-
-const MODES = {
-  MODE_NORMAL: "-- NORMAL --",
-  MODE_INSERT: "-- INSERT --",
-  MODE_CLI: "-- COMMAND LINE --",
-};
 
 export class Editor {
   constructor(bytes) {
@@ -27,12 +15,17 @@ export class Editor {
   }
 
   async run() {
+    Deno.stdin.setRaw(true);
+
     while (true) {
       await this.render(this.buffer.bytes, this.cursor.pos);
       const key = await Terminal.readKey();
-
       const info = await this.handleKey(key);
-      if (info && info.shouldReturn) return info;
+
+      if (info && info.shouldReturn) {
+        Deno.stdin.setRaw(false);
+        return info;
+      }
     }
   }
 
@@ -61,22 +54,22 @@ export class Editor {
       case KEYS.DOWN:
         this.cursor.moveDown(this.buffer.bytes);
         break;
-      case 0x68: // h
+      case KEYS.h:
         this.cursor.moveLeft(this.buffer.bytes);
         break;
-      case 0x6c: // l
+      case KEYS.l:
         this.cursor.moveRight(this.buffer.bytes);
         break;
-      case 0x6a: // j
+      case KEYS.j:
         this.cursor.moveDown(this.buffer.bytes);
         break;
-      case 0x6b: // k
+      case KEYS.k:
         this.cursor.moveUp(this.buffer.bytes);
         break;
-      case 0x69: // i
+      case KEYS.i:
         this.mode = MODES.MODE_INSERT;
         break;
-      case 0x3A: // :
+      case KEYS[":"]:
         this.mode = MODES.MODE_CLI;
         break;
     }
@@ -96,14 +89,14 @@ export class Editor {
       case KEYS.DOWN:
         this.cursor.moveDown(this.buffer.bytes);
         break;
-      case ESC:
+      case KEYS.ESC:
         this.mode = MODES.MODE_NORMAL;
         break;
-      case BACKSPACE:
+      case KEYS.BACKSPACE:
         this.cursor.pos = this.buffer.delete(this.cursor.pos);
         break;
-      case CR:
-        this.cursor.pos = this.buffer.insert(this.cursor.pos, NEW_LINE);
+      case KEYS.CR:
+        this.cursor.pos = this.buffer.insert(this.cursor.pos, KEYS.NEW_LINE);
         break;
       default:
         if (typeof key === "number") {
@@ -126,12 +119,12 @@ export class Editor {
       const key = await Terminal.readKey();
       pos = cmdBuff.insert(pos, key);
 
-      if (key === ESC) {
+      if (key === KEYS.ESC) {
         this.mode = MODES.MODE_NORMAL;
         return;
       }
 
-      if (key === CR) {
+      if (key === KEYS.CR) {
         if (decoder.decode(cmdBuff.bytes) === ":qa!\r") {
           return { shouldReturn: true, shouldWrite: false };
         }
@@ -156,7 +149,7 @@ export class Editor {
     let row = 1, col = 1;
 
     for (let i = 0; i < pos; i++) {
-      bytes[i] === NEW_LINE ? (row++, col = 1) : col++;
+      bytes[i] === KEYS.NEW_LINE ? (row++, col = 1) : col++;
     }
 
     return { row, col };
@@ -170,7 +163,7 @@ export class Editor {
   async drawStatus() {
     const status = this.mode;
     await Terminal.write(
-      new Uint8Array([NEW_LINE, NEW_LINE, ...encoder.encode(status)]),
+      new Uint8Array([KEYS.NEW_LINE, KEYS.NEW_LINE, ...encoder.encode(status)]),
     );
   }
 
