@@ -16,6 +16,15 @@ export class Terminal {
     await this.write(encoder.encode(`\x1b[${row};${col}H`));
   }
 
+  #mapKeys() {
+    return {
+      [KEYS.A]: () => KEYS.UP,
+      [KEYS.B]: () => KEYS.DOWN,
+      [KEYS.C]: () => KEYS.RIGHT,
+      [KEYS.D]: () => KEYS.LEFT,
+    };
+  }
+
   static async readKey() {
     const buf = new Uint8Array(3);
     const n = await Deno.stdin.read(buf);
@@ -23,16 +32,8 @@ export class Terminal {
     if (!n) return null;
 
     if (buf[0] === KEYS.ESC && buf[1] === KEYS["["]) {
-      switch (buf[2]) {
-        case KEYS.A:
-          return KEYS.UP;
-        case KEYS.B:
-          return KEYS.DOWN;
-        case KEYS.C:
-          return KEYS.RIGHT;
-        case KEYS.D:
-          return KEYS.LEFT;
-      }
+      const terminal = new Terminal();
+      return terminal.#mapKeys()[buf[2]]();
     }
 
     return buf[0];

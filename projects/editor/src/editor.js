@@ -29,31 +29,32 @@ export class Editor {
     }
   }
 
+  #normalModeCursorCallback() {
+    return {
+      [KEYS.LEFT]: () => this.cursor.moveLeft(this.buffer.bytes),
+      [KEYS.RIGHT]: () => this.cursor.moveRight(this.buffer.bytes),
+      [KEYS.UP]: () => this.cursor.moveUp(this.buffer.bytes),
+      [KEYS.DOWN]: () => this.cursor.moveDown(this.buffer.bytes),
+      [KEYS.h]: () => this.cursor.moveLeft(this.buffer.bytes),
+      [KEYS.l]: () => this.cursor.moveRight(this.buffer.bytes),
+      [KEYS.j]: () => this.cursor.moveDown(this.buffer.bytes),
+      [KEYS.k]: () => this.cursor.moveUp(this.buffer.bytes),
+    };
+  }
+
   async handleNormal(key) {
-    switch (key) {
-      case KEYS.LEFT:
-        return this.cursor.moveLeft(this.buffer.bytes);
-      case KEYS.RIGHT:
-        return this.cursor.moveRight(this.buffer.bytes);
-      case KEYS.UP:
-        return this.cursor.moveUp(this.buffer.bytes);
-      case KEYS.DOWN:
-        return this.cursor.moveDown(this.buffer.bytes);
-      case KEYS.h:
-        return this.cursor.moveLeft(this.buffer.bytes);
-      case KEYS.l:
-        return this.cursor.moveRight(this.buffer.bytes);
-      case KEYS.j:
-        return this.cursor.moveDown(this.buffer.bytes);
-      case KEYS.k:
-        return this.cursor.moveUp(this.buffer.bytes);
-      case KEYS.i:
-        this.mode = MODES.MODE_INSERT;
-        return await this.handleInsert();
-      case KEYS[":"]:
-        this.mode = MODES.MODE_CLI;
-        return await this.handleCLI();
+    if (key === KEYS.i) {
+      this.mode = MODES.MODE_INSERT;
+      return await this.handleInsert();
     }
+
+    if (key === KEYS[":"]) {
+      this.mode = MODES.MODE_CLI;
+      return await this.handleCLI();
+    }
+
+    const fnMapper = this.#normalModeCursorCallback();
+    if (fnMapper[key]) return fnMapper[key]();
   }
 
   async handleInsert() {
