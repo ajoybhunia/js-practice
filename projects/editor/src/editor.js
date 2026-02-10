@@ -20,7 +20,7 @@ export class Editor {
     while (true) {
       await this.render(this.buffer.bytes, this.cursor.pos);
       const key = await Terminal.readKey();
-      const info = await this.handleKey(key);
+      const info = await this.handleNormal(key);
 
       if (info && info.shouldReturn) {
         Deno.stdin.setRaw(false);
@@ -29,91 +29,76 @@ export class Editor {
     }
   }
 
-  async handleKey(key) {
-    switch (this.mode) {
-      case MODES.MODE_NORMAL:
-        return this.handleNormal(key);
-      case MODES.MODE_CLI:
-        return await this.handleCLI(key);
-      default:
-        return this.handleInsert(key);
-    }
-  }
-
-  handleNormal(key) {
+  async handleNormal(key) {
     switch (key) {
       case KEYS.LEFT:
-        this.cursor.moveLeft(this.buffer.bytes);
-        break;
+        return this.cursor.moveLeft(this.buffer.bytes);
       case KEYS.RIGHT:
-        this.cursor.moveRight(this.buffer.bytes);
-        break;
+        return this.cursor.moveRight(this.buffer.bytes);
       case KEYS.UP:
-        this.cursor.moveUp(this.buffer.bytes);
-        break;
+        return this.cursor.moveUp(this.buffer.bytes);
       case KEYS.DOWN:
-        this.cursor.moveDown(this.buffer.bytes);
-        break;
+        return this.cursor.moveDown(this.buffer.bytes);
       case KEYS.h:
-        this.cursor.moveLeft(this.buffer.bytes);
-        break;
+        return this.cursor.moveLeft(this.buffer.bytes);
       case KEYS.l:
-        this.cursor.moveRight(this.buffer.bytes);
-        break;
+        return this.cursor.moveRight(this.buffer.bytes);
       case KEYS.j:
-        this.cursor.moveDown(this.buffer.bytes);
-        break;
+        return this.cursor.moveDown(this.buffer.bytes);
       case KEYS.k:
-        this.cursor.moveUp(this.buffer.bytes);
-        break;
+        return this.cursor.moveUp(this.buffer.bytes);
       case KEYS.i:
         this.mode = MODES.MODE_INSERT;
-        break;
+        return await this.handleInsert();
       case KEYS[":"]:
         this.mode = MODES.MODE_CLI;
-        break;
+        return await this.handleCLI();
     }
   }
 
-  handleInsert(key) {
-    switch (key) {
-      case KEYS.LEFT:
-        this.cursor.moveLeft(this.buffer.bytes);
-        break;
-      case KEYS.RIGHT:
-        this.cursor.moveRight(this.buffer.bytes);
-        break;
-      case KEYS.UP:
-        this.cursor.moveUp(this.buffer.bytes);
-        break;
-      case KEYS.DOWN:
-        this.cursor.moveDown(this.buffer.bytes);
-        break;
-      case KEYS.ESC:
+  async handleInsert() {
+    while (true) {
+      await this.render(this.buffer.bytes, this.cursor.pos);
+      const key = await Terminal.readKey();
+
+      if (key === KEYS.ESC) {
         this.mode = MODES.MODE_NORMAL;
-        break;
-      case KEYS.BACKSPACE:
-        this.cursor.pos = this.buffer.delete(this.cursor.pos);
-        break;
-      case KEYS.CR:
-        this.cursor.pos = this.buffer.insert(this.cursor.pos, KEYS.NEW_LINE);
-        break;
-      default:
-        if (typeof key === "number") {
-          this.cursor.pos = this.buffer.insert(this.cursor.pos, key);
-        }
-        break;
+        return { shouldReturn: false };
+      }
+
+      switch (key) {
+        case KEYS.LEFT:
+          this.cursor.moveLeft(this.buffer.bytes);
+          break;
+        case KEYS.RIGHT:
+          this.cursor.moveRight(this.buffer.bytes);
+          break;
+        case KEYS.UP:
+          this.cursor.moveUp(this.buffer.bytes);
+          break;
+        case KEYS.DOWN:
+          this.cursor.moveDown(this.buffer.bytes);
+          break;
+        case KEYS.BACKSPACE:
+          this.cursor.pos = this.buffer.delete(this.cursor.pos);
+          break;
+        case KEYS.CR:
+          this.cursor.pos = this.buffer.insert(this.cursor.pos, KEYS.NEW_LINE);
+          break;
+        default:
+          if (typeof key === "number") {
+            this.cursor.pos = this.buffer.insert(this.cursor.pos, key);
+          }
+          break;
+      }
     }
   }
 
-  async handleCLI(key) {
-    const buff = new Uint8Array(2);
-    buff.set([58, key]);
-
-    const cmdBuff = new TextBuffer(buff);
+  async handleCLI() {
+    const cmdBuff = new TextBuffer(new Uint8Array([58]));
     let pos = cmdBuff.length;
 
-    this.render(cmdBuff.bytes, pos);
+    await this.render(cmdBuff.bytes, pos);
 
     while (true) {
       const key = await Terminal.readKey();
