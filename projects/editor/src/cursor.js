@@ -5,20 +5,20 @@ export class Cursor {
     this.pos = 0;
   }
 
-  lineStart(buffer) {
+  #lineStart(buffer) {
     let p = this.pos;
     while (p > 0 && buffer[p - 1] !== KEYS.NEW_LINE) p--;
     return p;
   }
 
-  lineEnd(buffer) {
+  #lineEnd(buffer) {
     let p = this.pos;
     while (p < buffer.length && buffer[p] !== KEYS.NEW_LINE) p++;
     return p;
   }
 
-  column(buffer) {
-    return this.pos - this.lineStart(buffer);
+  #column(buffer) {
+    return this.pos - this.#lineStart(buffer);
   }
 
   moveLeft(buffer) {
@@ -32,8 +32,8 @@ export class Cursor {
   }
 
   moveDown(buffer) {
-    const col = this.column(buffer);
-    const end = this.lineEnd(buffer);
+    const col = this.#column(buffer);
+    const end = this.#lineEnd(buffer);
 
     if (end >= buffer.length) return;
 
@@ -48,8 +48,8 @@ export class Cursor {
   }
 
   moveUp(buffer) {
-    const col = this.column(buffer);
-    const start = this.lineStart(buffer);
+    const col = this.#column(buffer);
+    const start = this.#lineStart(buffer);
 
     if (start === 0) return;
 
