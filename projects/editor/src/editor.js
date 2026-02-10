@@ -53,8 +53,24 @@ export class Editor {
       return await this.handleCLI();
     }
 
-    const fnMapper = this.#normalModeCursorCallback();
-    if (fnMapper[key]) return fnMapper[key]();
+    const mapperFns = this.#normalModeCursorCallback();
+    if (mapperFns[key]) return mapperFns[key]();
+  }
+
+  #insertModeCursorCallback() {
+    return {
+      [KEYS.LEFT]: () => this.cursor.moveLeft(this.buffer.bytes),
+      [KEYS.RIGHT]: () => this.cursor.moveRight(this.buffer.bytes),
+      [KEYS.UP]: () => this.cursor.moveUp(this.buffer.bytes),
+      [KEYS.DOWN]: () => this.cursor.moveDown(this.buffer.bytes),
+    };
+  }
+
+  #insertByteCallback() {
+    return {
+      [KEYS.BACKSPACE]: () => this.buffer.delete(this.cursor.pos),
+      [KEYS.CR]: () => this.buffer.insert(this.cursor.pos, KEYS.NEW_LINE),
+    };
   }
 
   async handleInsert() {
@@ -62,35 +78,20 @@ export class Editor {
       await this.render(this.buffer.bytes, this.cursor.pos);
       const key = await Terminal.readKey();
 
+      const cursorFns = this.#normalModeCursorCallback();
+      const byteFns = this.#insertByteCallback();
+
       if (key === KEYS.ESC) {
         this.mode = MODES.MODE_NORMAL;
         return { shouldReturn: false };
-      }
-
-      switch (key) {
-        case KEYS.LEFT:
-          this.cursor.moveLeft(this.buffer.bytes);
-          break;
-        case KEYS.RIGHT:
-          this.cursor.moveRight(this.buffer.bytes);
-          break;
-        case KEYS.UP:
-          this.cursor.moveUp(this.buffer.bytes);
-          break;
-        case KEYS.DOWN:
-          this.cursor.moveDown(this.buffer.bytes);
-          break;
-        case KEYS.BACKSPACE:
-          this.cursor.pos = this.buffer.delete(this.cursor.pos);
-          break;
-        case KEYS.CR:
-          this.cursor.pos = this.buffer.insert(this.cursor.pos, KEYS.NEW_LINE);
-          break;
-        default:
-          if (typeof key === "number") {
-            this.cursor.pos = this.buffer.insert(this.cursor.pos, key);
-          }
-          break;
+      } else if (cursorFns[key]) {
+        cursorFns[key]();
+      } else if (byteFns[key]) {
+        this.cursor.pos = byteFns[key]();
+      } else {
+        if (typeof key === "number") {
+          this.cursor.pos = this.buffer.insert(this.cursor.pos, key);
+        }
       }
     }
   }
