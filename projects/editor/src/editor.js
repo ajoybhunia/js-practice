@@ -104,7 +104,10 @@ export class Editor {
 
     while (true) {
       const key = await Terminal.readKey();
-      pos = cmdBuff.insert(pos, key);
+
+      pos = (key === KEYS.BACKSPACE)
+        ? cmdBuff.delete(pos)
+        : cmdBuff.insert(pos, key);
 
       if (key === KEYS.ESC) {
         this.mode = MODES.MODE_NORMAL;
