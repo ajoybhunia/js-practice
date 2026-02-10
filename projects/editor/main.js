@@ -1,9 +1,7 @@
 import { Editor } from "./src/editor.js";
 import { Terminal } from "./src/terminal.js";
 
-const main = async (fileName) => {
-  const prefix = "./samples/";
-  const filePath = `${prefix}${fileName}`;
+const main = async (filePath) => {
   const file = await Deno.open(filePath, {
     read: true,
     write: true,
@@ -22,4 +20,4 @@ const main = async (fileName) => {
   await Terminal.clear();
 };
 
-await main(Deno.args);
+await main(Deno.args[0]);

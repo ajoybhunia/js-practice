@@ -1,4 +1,4 @@
-import { Terminal } from "./terminal.js";
+import { KEYS, Terminal } from "./terminal.js";
 import { Cursor } from "./cursor.js";
 import { TextBuffer } from "./text_buffer.js";
 
@@ -49,6 +49,18 @@ export class Editor {
 
   handleNormal(key) {
     switch (key) {
+      case KEYS.LEFT:
+        this.cursor.moveLeft(this.buffer.bytes);
+        break;
+      case KEYS.RIGHT:
+        this.cursor.moveRight(this.buffer.bytes);
+        break;
+      case KEYS.UP:
+        this.cursor.moveUp(this.buffer.bytes);
+        break;
+      case KEYS.DOWN:
+        this.cursor.moveDown(this.buffer.bytes);
+        break;
       case 0x68: // h
         this.cursor.moveLeft(this.buffer.bytes);
         break;
@@ -72,6 +84,18 @@ export class Editor {
 
   handleInsert(key) {
     switch (key) {
+      case KEYS.LEFT:
+        this.cursor.moveLeft(this.buffer.bytes);
+        break;
+      case KEYS.RIGHT:
+        this.cursor.moveRight(this.buffer.bytes);
+        break;
+      case KEYS.UP:
+        this.cursor.moveUp(this.buffer.bytes);
+        break;
+      case KEYS.DOWN:
+        this.cursor.moveDown(this.buffer.bytes);
+        break;
       case ESC:
         this.mode = MODES.MODE_NORMAL;
         break;
@@ -82,7 +106,9 @@ export class Editor {
         this.cursor.pos = this.buffer.insert(this.cursor.pos, NEW_LINE);
         break;
       default:
-        this.cursor.pos = this.buffer.insert(this.cursor.pos, key);
+        if (typeof key === "number") {
+          this.cursor.pos = this.buffer.insert(this.cursor.pos, key);
+        }
         break;
     }
   }
