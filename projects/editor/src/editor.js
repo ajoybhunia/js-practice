@@ -78,7 +78,7 @@ export class Editor {
       await this.render(this.buffer.bytes, this.cursor.pos);
       const key = await Terminal.readKey();
 
-      const cursorFns = this.#normalModeCursorCallback();
+      const cursorFns = this.#insertModeCursorCallback();
       const byteFns = this.#insertByteCallback();
 
       if (key === KEYS.ESC) {
@@ -96,6 +96,17 @@ export class Editor {
     }
   }
 
+  #quitOptions() {
+    return {
+      ":qa!\r": () => ({ shouldReturn: true, shouldWrite: false }),
+      ":wq!\r": () => ({
+        shouldReturn: true,
+        shouldWrite: true,
+        data: this.buffer.bytes,
+      }),
+    };
+  }
+
   async handleCLI() {
     const cmdBuff = new TextBuffer(new Uint8Array([58]));
     let pos = cmdBuff.length;
@@ -109,23 +120,16 @@ export class Editor {
         ? cmdBuff.delete(pos)
         : cmdBuff.insert(pos, key);
 
-      if (key === KEYS.ESC) {
+      if (key === KEYS.ESC || cmdBuff.length === 0) {
         this.mode = MODES.MODE_NORMAL;
         return;
       }
 
       if (key === KEYS.CR) {
-        if (decoder.decode(cmdBuff.bytes) === ":qa!\r") {
-          return { shouldReturn: true, shouldWrite: false };
-        }
+        const quitOptions = this.#quitOptions();
+        const callback = quitOptions[decoder.decode(cmdBuff.bytes)];
 
-        if (decoder.decode(cmdBuff.bytes) === ":wq!\r") {
-          return {
-            shouldReturn: true,
-            shouldWrite: true,
-            data: this.buffer.bytes,
-          };
-        }
+        if (callback) return callback();
 
         this.mode = MODES.MODE_NORMAL;
         return;
